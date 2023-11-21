@@ -1,44 +1,33 @@
 // Chakra imports
+import tableDataDevelopment from "./variables/tableDataDevelopment.json";
 import DevelopmentTable from "./components/DevelopmentTable";
-import CheckTable from "./components/CheckTable";
-import ColumnsTable from "./components/ColumnsTable";
-import ComplexTable from "./components/ComplexTable";
 import {
   columnsDataDevelopment,
-  columnsDataCheck,
-  columnsDataColumns,
-  columnsDataComplex,
 } from "./variables/columnsData";
 import {
   Box,
   SimpleGrid,
 } from "@chakra-ui/react";
-import tableDataDevelopment from "./variables/tableDataDevelopment.json";
-import tableDataCheck from "./variables/tableDataCheck.json";
-import tableDataColumns from "./variables/tableDataColumns.json";
-import tableDataComplex from "./variables/tableDataComplex.json";
 import React from "react";
 
 export default function Settings() {
-  // Chakra Color Mode
+  // Lọc ra những dự án có thuộc tính ondelete bằng 0
+  const filteredData = tableDataDevelopment.filter((project) => project.ondelete === 0);
+
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <SimpleGrid
         mb='20px'
         columns={{ sm: 1, md: 2 }}
-        spacing={{ base: "20px", xl: "20px" }}>
+        spacing={{ base: "20px", xl: "20px" }}
+        height="80vh" 
+        width="320vh"
+      >
         <DevelopmentTable
           columnsData={columnsDataDevelopment}
-          tableData={tableDataDevelopment}     
-        />
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <ColumnsTable
-          columnsData={columnsDataColumns}
-          tableData={tableDataColumns}
-        />
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
+          tableData={filteredData} // Truyền dữ liệu đã được lọc
+          height="100%" 
+          width="100%"
         />
       </SimpleGrid>
     </Box>

@@ -1,6 +1,4 @@
-import React from "react";
-
-// Chakra imports
+import React, { useState } from "react";
 import {
   Icon,
   Flex,
@@ -11,15 +9,23 @@ import {
   MenuList,
   useDisclosure,
   useColorModeValue,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button,
 } from "@chakra-ui/react";
-// Assets
 import {
   MdOutlineMoreHoriz,
-  MdOutlinePerson,
-  MdOutlineCardTravel,
-  MdOutlineLightbulb,
-  MdOutlineSettings,
+  MdRemoveRedEye,
+  MdEditNote,
+  MdDelete,
 } from "react-icons/md";
+
+import Modal from "../../views/admin/project/components/ViewProject";
+import { EditProject } from "../../views/admin/project/components/EditProject";
 
 export default function Banner(props) {
   const { ...rest } = props;
@@ -45,120 +51,182 @@ export default function Banner(props) {
     { bg: "whiteAlpha.100" }
   );
 
-  // Ellipsis modals
   const {
     isOpen: isOpen1,
     onOpen: onOpen1,
     onClose: onClose1,
   } = useDisclosure();
 
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+  const { isOpen: isViewOpen, onOpen: onViewOpen, onClose: onViewClose } = useDisclosure();
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const openDeleteDialog = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
+  };
+
+  const [editModalKey, setEditModalKey] = useState(0);
+  const [viewModalKey, setViewModalKey] = useState(0);
+
+  const openEditModal = () => {
+    onEditOpen();
+    setEditModalKey((prevKey) => prevKey + 1);
+  };
+
+  const openViewModal = () => {
+    onViewOpen();
+    setViewModalKey((prevKey) => prevKey + 1);
+  };
+
+  const closeEditModal = () => {
+    onEditClose();
+    setEditModalKey((prevKey) => prevKey + 1);
+  };
+
+  const closeViewModal = () => {
+    setViewModalKey((prevKey) => prevKey + 1);
+    closeEditModal();
+  };
+
+  const handleDelete = () => {
+    // Thực hiện xóa dự án ở đây
+    // Sau khi xóa, đóng hộp thoại
+    closeDeleteDialog();
+  };
+
   return (
-    <Menu isOpen={isOpen1} onClose={onClose1}>
-      <MenuButton
-        align='center'
-        justifyContent='center'
-        bg={bgButton}
-        _hover={bgHover}
-        _focus={bgFocus}
-        _active={bgFocus}
-        w='37px'
-        h='37px'
-        lineHeight='100%'
-        onClick={onOpen1}
-        borderRadius='10px'
-        {...rest}>
-        <Icon as={MdOutlineMoreHoriz} color={iconColor} w='24px' h='24px' />
-      </MenuButton>
-      <MenuList
-        w='150px'
-        minW='unset'
-        maxW='150px !important'
-        border='transparent'
-        backdropFilter='blur(63px)'
-        bg={bgList}
-        boxShadow={bgShadow}
-        borderRadius='20px'
-        p='15px'>
-        <MenuItem
-          transition='0.2s linear'
-          color={textColor}
-          _hover={textHover}
-          p='0px'
-          borderRadius='8px'
-          _active={{
-            bg: "transparent",
-          }}
-          _focus={{
-            bg: "transparent",
-          }}
-          mb='10px'>
-          <Flex align='center'>
-            <Icon as={MdOutlinePerson} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
-              Panel 1
-            </Text>
-          </Flex>
-        </MenuItem>
-        <MenuItem
-          transition='0.2s linear'
-          p='0px'
-          borderRadius='8px'
-          color={textColor}
-          _hover={textHover}
-          _active={{
-            bg: "transparent",
-          }}
-          _focus={{
-            bg: "transparent",
-          }}
-          mb='10px'>
-          <Flex align='center'>
-            <Icon as={MdOutlineCardTravel} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
-              Panel 2
-            </Text>
-          </Flex>
-        </MenuItem>
-        <MenuItem
-          transition='0.2s linear'
-          p='0px'
-          borderRadius='8px'
-          color={textColor}
-          _hover={textHover}
-          _active={{
-            bg: "transparent",
-          }}
-          _focus={{
-            bg: "transparent",
-          }}
-          mb='10px'>
-          <Flex align='center'>
-            <Icon as={MdOutlineLightbulb} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
-              Panel 3
-            </Text>
-          </Flex>
-        </MenuItem>
-        <MenuItem
-          transition='0.2s linear'
-          color={textColor}
-          _hover={textHover}
-          p='0px'
-          borderRadius='8px'
-          _active={{
-            bg: "transparent",
-          }}
-          _focus={{
-            bg: "transparent",
-          }}>
-          <Flex align='center'>
-            <Icon as={MdOutlineSettings} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
-              Panel 4
-            </Text>
-          </Flex>
-        </MenuItem>
-      </MenuList>
-    </Menu>
+    <>
+      <Menu isOpen={isOpen1} onClose={onClose1}>
+        <MenuButton
+          align="center"
+          justifyContent="center"
+          bg={bgButton}
+          _hover={bgHover}
+          _focus={bgFocus}
+          _active={bgFocus}
+          w="37px"
+          h="37px"
+          lineHeight="100%"
+          onClick={onOpen1}
+          borderRadius="10px"
+          {...rest}
+        >
+          <Icon as={MdOutlineMoreHoriz} color={iconColor} w="24px" h="24px" />
+        </MenuButton>
+        <MenuList
+          w="150px"
+          minW="unset"
+          maxW="150px !important"
+          border="transparent"
+          backdropFilter="blur(63px)"
+          bg={bgList}
+          boxShadow={bgShadow}
+          borderRadius="20px"
+          p="15px"
+        >
+          <MenuItem
+            transition="0.2s linear"
+            color= "blue"
+            _hover={textHover}
+            p="0px"
+            borderRadius="8px"
+            _active={{
+              bg: "transparent",
+            }}
+            _focus={{
+              bg: "transparent",
+            }}
+            mb="10px"
+            onClick={openViewModal}
+          >
+            <Flex align="center">
+              <Icon as={MdRemoveRedEye} color = "blue" h="16px" w="16px" me="8px" />
+              <Text fontSize="sm" fontWeight="400">
+                View
+              </Text>
+            </Flex>
+          </MenuItem>
+
+          <MenuItem
+            transition="0.2s linear"
+            p="0px"
+            borderRadius="8px"
+            color="green"
+            _hover={textHover}
+            _active={{
+              bg: "transparent",
+            }}
+            _focus={{
+              bg: "transparent",
+            }}
+            mb="10px"
+            onClick={openEditModal}
+          >
+            <Flex align="center">
+              <Icon as={MdEditNote} color="green" h="16px" w="16px" me="8px" />
+              <Text fontSize="sm" fontWeight="400">
+                Edit
+              </Text>
+            </Flex>
+          </MenuItem>
+
+          <MenuItem
+            transition="0.2s linear"
+            p="0px"
+            borderRadius="8px"
+            color="red"
+            _hover={textHover}
+            _active={{
+              bg: "transparent",
+            }}
+            _focus={{
+              bg: "transparent",
+            }}
+            mb="10px"
+            onClick={openDeleteDialog}
+          >
+            <Flex align="center">
+              <Icon as={MdDelete} color="red" h="16px" w="16px" me="8px" />
+              <Text fontSize="sm" fontWeight="400">
+                Delete
+              </Text>
+            </Flex>
+          </MenuItem>
+        </MenuList>
+      </Menu>
+
+      {isEditOpen && <EditProject isOpen={isEditOpen} onClose={closeEditModal} key={editModalKey} />}
+      {isViewOpen && <Modal isOpen={isViewOpen} onClose={closeViewModal} key={viewModalKey} />}
+
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        leastDestructiveRef={undefined}
+        onClose={closeDeleteDialog}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Project
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Bạn có chắc chắn muốn xóa project này không
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button onClick={closeDeleteDialog}>Cancel</Button>
+              <Button colorScheme="red" onClick={handleDelete}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
   );
 }
