@@ -198,7 +198,7 @@ export default function HeaderLinks(props) {
 							<Text fontSize="sm">My List Task</Text>
 						</MenuItem>
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
-							<Text fontSize="sm">My Project</Text>
+							<Text fontSize="sm">My Workspace</Text>
 						</MenuItem>
 
 						<MenuItem
