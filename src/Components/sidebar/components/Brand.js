@@ -18,7 +18,7 @@ export function SidebarBrand() {
       {/* <SlackLogo h='26px' w='175px' my='32px' color={logoColor} /> */}
       {/* <Text fontSize='3xl'>Manage Task</Text> */}
       <Box h='26px' w='175px' my='32px' color={logoColor}>
-         <Text fontSize='28px' fontWeight='500'> Alien App </Text>
+         <Text fontSize='30px' fontWeight='500'> Taskabar </Text>
       </Box>
       <HSeparator mb='20px' />
     </Flex>

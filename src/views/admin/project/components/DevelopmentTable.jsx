@@ -93,7 +93,7 @@ export default function DevelopmentTable(props) {
           fontSize='22px'
           fontWeight='700'
           lineHeight='100%'>
-          List Project
+          List WorkSpace
         </Text>
         <Box width="auto">
           <Box>

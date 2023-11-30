@@ -35,7 +35,7 @@ const routes = [
     component: MyListTask,
   },
   {
-    name: "My Project",
+    name: "My WorkSpace",
     layout: "/admin",
     path: "/project",
     icon: <Icon as={MdCode} width='20px' height='20px' color='inherit' />,

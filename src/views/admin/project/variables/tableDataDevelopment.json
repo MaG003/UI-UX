@@ -31,7 +31,7 @@
       "apple",
       "windows"
     ],
-    "date": "13/03/2023",
+    "date": "13.Mar",
     "priority": "High",
     "progress": 25,
     "ondelete": 0
@@ -53,7 +53,7 @@
       "apple",
       "windows"
     ],
-    "date": "Oct 24",
+    "date": "24.Oct",
     "progress": 75.5,
     "ondelete": 0
   },
@@ -64,7 +64,7 @@
       "android",
       "windows"
     ],
-    "date": "Oct 24",
+    "date": "24.Oct",
     "progress": 75.5,
     "ondelete": 0
   },
