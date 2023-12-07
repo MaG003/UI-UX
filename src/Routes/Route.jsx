@@ -22,19 +22,19 @@ const routes = [
     component: MyDashboard,
   },
   {
-    name: "My Calendar",
+    name: "Calendar Project",
     layout: "/admin",
     path: "/calendar",
     icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,
     component: MyCalendar,
   },
-  {
-    name: "Calendar Project",
-    layout: "/admin",
-    path: "/calendarproject",
-    icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,
-    component: CalendarProject,
-  },
+  // {
+  //   name: "Calendar Project",
+  //   layout: "/admin",
+  //   path: "/calendarproject",
+  //   icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,
+  //   component: CalendarProject,
+  // },
   {
     name: "My List Task",
     layout: "/admin",
