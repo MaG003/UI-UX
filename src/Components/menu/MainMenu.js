@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Icon,
   Flex,
@@ -22,10 +23,12 @@ import {
   MdRemoveRedEye,
   MdEditNote,
   MdDelete,
+  MdEditCalendar,
 } from "react-icons/md";
 
 import Modal from "../../views/admin/project/components/ViewProject";
 import { EditProject } from "../../views/admin/project/components/EditProject";
+import CalendarProject from "../../views/admin/project/components/CalendarProject"
 
 export default function Banner(props) {
   const { ...rest } = props;
@@ -59,6 +62,8 @@ export default function Banner(props) {
 
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
   const { isOpen: isViewOpen, onOpen: onViewOpen, onClose: onViewClose } = useDisclosure();
+  const { isOpen: isCalendarOpen, onOpen: onCalendarOpen, onClose: onCalendarClose } = useDisclosure();
+
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -72,25 +77,36 @@ export default function Banner(props) {
 
   const [editModalKey, setEditModalKey] = useState(0);
   const [viewModalKey, setViewModalKey] = useState(0);
-
-  const openEditModal = () => {
-    onEditOpen();
-    setEditModalKey((prevKey) => prevKey + 1);
-  };
+  const [calendarModalKey, setCalendarModalKey] = useState(0);
 
   const openViewModal = () => {
-    onViewOpen();
     setViewModalKey((prevKey) => prevKey + 1);
-  };
-
-  const closeEditModal = () => {
-    onEditClose();
-    setEditModalKey((prevKey) => prevKey + 1);
+    onViewOpen();
   };
 
   const closeViewModal = () => {
     setViewModalKey((prevKey) => prevKey + 1);
-    closeEditModal();
+    onViewClose();
+  };
+
+  const openCalendarModal = () => {
+    setCalendarModalKey((prevKey) => prevKey + 1);
+    onCalendarOpen();
+  };
+
+  const closeCalendarModal = () => {
+    setViewModalKey((prevKey) => prevKey + 1);
+    onCalendarClose();
+  };
+
+  const openEditModal = () => {
+    setEditModalKey((prevKey) => prevKey + 1);
+    onEditOpen();
+  };
+
+  const closeEditModal = () => {
+    setEditModalKey((prevKey) => prevKey + 1);
+    onEditClose();
   };
 
   const handleDelete = () => {
@@ -131,7 +147,7 @@ export default function Banner(props) {
         >
           <MenuItem
             transition="0.2s linear"
-            color= "blue"
+            color="blue"
             _hover={textHover}
             p="0px"
             borderRadius="8px"
@@ -145,9 +161,33 @@ export default function Banner(props) {
             onClick={openViewModal}
           >
             <Flex align="center">
-              <Icon as={MdRemoveRedEye} color = "blue" h="16px" w="16px" me="8px" />
+              <Icon as={MdRemoveRedEye} color="blue" h="16px" w="16px" me="8px" />
               <Text fontSize="sm" fontWeight="400">
                 View
+              </Text>
+            </Flex>
+          </MenuItem>
+
+          <MenuItem
+            transition="0.2s linear"
+            color="purple"
+            _hover={textHover}
+            p="0px"
+            borderRadius="8px"
+            _active={{
+              bg: "transparent",
+            }}
+            _focus={{
+              bg: "transparent",
+            }}
+            mb="10px"
+            onClick={openCalendarModal}
+            // as={Link} to="/admin/project/calendarproject"
+          >
+            <Flex align="center">
+              <Icon as={MdEditCalendar} color="purple" h="16px" w="16px" me="8px" />
+              <Text fontSize="sm" fontWeight="400">
+                Calendar
               </Text>
             </Flex>
           </MenuItem>
@@ -202,6 +242,7 @@ export default function Banner(props) {
 
       {isEditOpen && <EditProject isOpen={isEditOpen} onClose={closeEditModal} key={editModalKey} />}
       {isViewOpen && <Modal isOpen={isViewOpen} onClose={closeViewModal} key={viewModalKey} />}
+      {isCalendarOpen && <CalendarProject isOpen={isCalendarOpen} onClose={closeCalendarModal} key={calendarModalKey} />}
 
       <AlertDialog
         isOpen={isDeleteDialogOpen}
@@ -215,7 +256,7 @@ export default function Banner(props) {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Bạn có chắc chắn muốn xóa project này không
+              Are you sure you want to delete this project?
             </AlertDialogBody>
 
             <AlertDialogFooter>

@@ -10,6 +10,7 @@ import {
 import SignIn from '../views/auth/signin/index'
 import MyDashboard from '../views/admin/dashboard/index'
 import MyCalendar from "../views/admin/calendar/index"
+import CalendarProject from "../views/admin/calendarproject/index"
 import MyListTask from "../views/admin/list/index"
 import MyProject from "../views/admin/project/index"
 const routes = [
@@ -26,6 +27,13 @@ const routes = [
     path: "/calendar",
     icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,
     component: MyCalendar,
+  },
+  {
+    name: "Calendar Project",
+    layout: "/admin",
+    path: "/calendarproject",
+    icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,
+    component: CalendarProject,
   },
   {
     name: "My List Task",
