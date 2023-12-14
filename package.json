@@ -2,6 +2,7 @@
   "name": "airtable-clone",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000/",
   "homepage": "https://nguyenvanhao1209.github.io/UI-UX/",
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
