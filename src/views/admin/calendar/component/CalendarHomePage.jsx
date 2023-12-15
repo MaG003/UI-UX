@@ -43,6 +43,7 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { LpTaskCard } from "../../list/component/LpTaskCard";
 
 const CalendarHomePage = () => {
   const DragDropCalendar = withDragAndDrop(Calendar);
@@ -59,10 +60,12 @@ const CalendarHomePage = () => {
   }
 
   const [title, setTitle] = useState("");
+  const [Description, setDescription] = useState("");
+  const [TaskStatus, setTaskStatus] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("00:00:00");
-  const [endTime, setEndTime] = useState("00:00:00");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [selectedEvent, setSelectedEvent] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
@@ -251,6 +254,20 @@ const CalendarHomePage = () => {
   // const handleRedirect = () => {
   //   history.push('/admin/list-task');
   // };
+  
+  const generateJsonData = () => {
+    const jsonData = {
+      title: title,
+      description: Description,
+      task_status: TaskStatus,
+      DateStart: startDate,
+      TimeStart: startTime,
+      DateEnd: endDate,
+      TimeEnd: endTime
+    };
+  
+    return jsonData;
+  };
 
   return (
     <div
@@ -308,7 +325,7 @@ const CalendarHomePage = () => {
       <Modal isOpen={isOpen || openModal} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add New Task</ModalHeader>
+          <ModalHeader>Create New Task</ModalHeader>
           <ModalCloseButton
             onClick={() => {
               setOpenModal(false);
@@ -317,20 +334,45 @@ const CalendarHomePage = () => {
           <ModalBody padding="5%">
             {/* title  */}
 
-            <FormControl>
+            <FormControl >
               <FormLabel>Title</FormLabel>
               <Input
                 placeholder="Title"
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                autoFocus
               />
+            </FormControl>
+
+            {/* Description  */}
+
+            <FormControl mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Input
+                placeholder="Enter description"
+                name="Description"
+                value={Description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormControl>
+
+            {/* Task Status */}
+            <FormControl mt={4}>
+              <FormLabel>Task Status</FormLabel>
+              <Select
+                value={TaskStatus}
+                onChange={(e) => setTaskStatus(e.target.value)}
+              >
+                <option value="todo">To Do</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
+                <option value="overdue">Overdue</option>
+              </Select>
             </FormControl>
 
             {/* Start Date  */}
 
-            <FormControl>
+            <FormControl mt={4}>
               <FormLabel>Start Date</FormLabel>
               <Input
                 name="start-date"
@@ -340,9 +382,19 @@ const CalendarHomePage = () => {
               />
             </FormControl>
 
+            <FormControl mt={4}>
+              <FormLabel>Start Time</FormLabel>
+              <Input
+                name="start-time"
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+              />
+            </FormControl>
+
             {/* End Date  */}
 
-            <FormControl>
+            <FormControl mt={4}>
               <FormLabel>End Date</FormLabel>
               <Input
                 name="end-date"
@@ -351,51 +403,17 @@ const CalendarHomePage = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </FormControl>
-            
-            <FormControl>
-              <FormLabel>Add Member</FormLabel>
+
+            <FormControl mt={4}>
+              <FormLabel>End Time</FormLabel>
               <Input
-                placeholder="Add Member"
-                name="Add Member"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                autoFocus
+                name="end-time"
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
               />
             </FormControl>
           </ModalBody>
-
-          
-
-          <FormControl width="90%" margin="auto">
-            <FormLabel>Start Time</FormLabel>
-            <Input
-              name="start-time"
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl width="90%" margin="auto">
-            <FormLabel>End Time</FormLabel>
-            <Input
-              name="end-time"
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl width="90%" margin="auto">
-            <FormLabel>PM/AM</FormLabel>
-            <Select
-              value={amPm}
-              onChange={(e) => setAmPm(e.target.value)}
-            >
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </Select>
-          </FormControl>
 
           <ModalFooter>
             <Button
@@ -449,6 +467,16 @@ const CalendarHomePage = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {/* <LpTaskCard
+        title={title}
+        description={Description}
+        task_status={TaskStatus}
+        DateStart={startDate}
+        TimeStart={startTime}
+        DateEnd={endDate}
+        TimeEnd={endTime}
+      /> */}
     </div>
   );
 };

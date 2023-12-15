@@ -70,7 +70,7 @@ export default function Conversion(props) {
             30%
           </Text>
         </Flex>
-        <VSeparator mx={{ base: "60px", xl: "60px", "2xl": "60px" }} />
+        <VSeparator mx={{ base: "60px", xl: "40px", "2xl": "60px" }} />
         <Flex direction='column' py='5px' me='10px'>
           <Flex align='center'>
             <Box h='8px' w='8px' bg='#6AD2FF' borderRadius='50%' me='4px' />
@@ -79,14 +79,14 @@ export default function Conversion(props) {
               color='secondaryGray.600'
               fontWeight='700'
               mb='5px'>
-              To do
+              Todo
             </Text>
           </Flex>
           <Text fontSize='xs' color={textColor} fontWeight='700'>
             25%
           </Text>
         </Flex>
-        <VSeparator mx={{ base: "60px", xl: "60px", "2xl": "60px" }} />
+        <VSeparator mx={{ base: "60px", xl: "40px", "2xl": "60px" }} />
         <Flex direction='column' py='5px' me='10px'>
           <Flex align='center'>
             <Box h='8px' w='8px' bg='#39B8FF' borderRadius='50%' me='4px' />

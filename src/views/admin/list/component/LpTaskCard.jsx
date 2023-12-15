@@ -24,8 +24,9 @@ import { useDispatch } from "react-redux";
 import { deleteTasks, getTasks,updateTasks } from "../../../../Redux/AppContext/actions";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import {CalendarHomePage} from "../../calendar/component/CalendarHomePage";
 
-const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorScheme }) => {
+const LpTaskCard = ({ id, title, description,task_status, tags, DateStart, DateEnd, TimeStart, TimeEnd, colorScheme }) => {
 
     const dispatch = useDispatch();
     const toast = useToast();
@@ -49,14 +50,20 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
     const [taskDescription, setTaskDescription] = useState(description);
     const [taskStatus, setTaskStatus] = useState(task_status);
     const [taskTags, setTaskTags] = useState(tags);
-    const [taskDate,setTaskDate] = useState(Date)
+    const [taskDateStart,setTaskDateStart] = useState(DateStart);
+    const [taskDateEnd,setTaskDateEnd] = useState(DateEnd);
+    const [taskTimeStart,setTaskTimeStart] = useState(TimeStart);
+    const [taskTimeEnd,setTaskTimeEnd] = useState(TimeEnd);
 
     const updateFunc = ()=>{
         dispatch(
             updateTasks(id, {
               title: taskTitle,
               description: taskDescription,
-              Date: taskDate,
+              DateStart: taskDateStart,
+              DateEnd: taskDateEnd,
+              TimeStart: taskTimeStart,
+              TimeEnd: taskTimeEnd,
               tags :taskTags,
               task_status: taskStatus,
             })
@@ -85,6 +92,7 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
                     </Text>
                 </Flex>
             </Box>
+
             <Box>
                 <Stack
                     direction={{ base: "column", sm: "column", md: "column", lg: "row", xl: "row" }}
@@ -93,6 +101,7 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
                     <Badge fontWeight='bold' fontSize="12px" colorScheme={colorScheme}>{tags}</Badge>
                 </Stack>
             </Box>
+
             <Box>
                 <Flex>
                     <Text
@@ -102,17 +111,49 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
                     >{description}</Text>
                 </Flex>
             </Box>
+
             <Box>
                 <Flex>
                     <Text
                         fontWeight="500"
                         marginTop="3%"
                         marginBottom="3%"
-                    >{Date}
+                    >{DateStart}
+                    </Text>
+
+                    <Text
+                        fontWeight="500"
+                        marginTop="3%"
+                        marginBottom="3%"
+                        marginLeft="20px"
+                    >{TimeStart}
                     </Text>
 
                 </Flex>
+                
             </Box>
+
+            <Box>
+                <Flex>
+                    <Text
+                        fontWeight="500"
+                        marginTop="3%"
+                        marginBottom="3%"
+                    >{DateEnd}
+                    </Text>
+
+                    <Text
+                        fontWeight="500"
+                        marginTop="3%"
+                        marginBottom="3%"
+                        marginLeft="20px"
+                    >{TimeEnd}
+                    </Text>
+
+                </Flex>
+                
+            </Box>
+
             <Box>
                 <Flex
                     padding="4%"
@@ -126,6 +167,7 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
                     </Box>
                 </Flex>
             </Box>
+            
             <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
@@ -153,20 +195,10 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
                                 // onChange={(e) => setTaskState({ type: 'description', payload: e.target.value })}
                             />
                     </FormControl>
-                    <FormControl mt={4}>
-                       <FormLabel>End Date</FormLabel>
-                       <Input
-                         name="start-date"
-                         type="date"
-                         value={taskDate}
-                         onChange={(e)=>{ setTaskDate(e.target.value)}}
-                        //  onChange={(e) => setTaskState({ type: 'Date', payload: e.target.value })}
-                        />
-                    </FormControl>
 
                     {/* Task Status  */}
 
-                    <Box mb="0.5rem">
+                    <Box mb="0.5rem" mt={4}>
                         <FormLabel>Task Status</FormLabel>
                         <Select
                             placeholder="Select Status"
@@ -175,14 +207,59 @@ const LpTaskCard = ({ id, title, description,task_status, tags, Date, colorSchem
                             // onChange={(e) => setTaskState({ type: 'task_status', payload: e.target.value })}
                         >
                             <option value="todo">Todo</option>
-                            <option value="progress">In-Progress</option>
+                            <option value="progress">Doing</option>
                             <option value="done">Done</option>
+                            <option value="overdue">Overdue</option>
                         </Select>
                     </Box>
 
+                    <FormControl mt={4}>
+                       <FormLabel>Start Date</FormLabel>
+                       <Input
+                         name="start-date"
+                         type="date"
+                         value={taskDateStart}
+                         onChange={(e)=>{ setTaskDateStart(e.target.value)}}
+                        //  onChange={(e) => setTaskState({ type: 'DateStart', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+                    <FormControl mt={4}>
+                       <FormLabel>Start Time</FormLabel>
+                       <Input
+                         name="start-time"
+                         type="time"
+                         value={taskTimeStart}
+                         onChange={(e)=>{ setTaskTimeStart(e.target.value)}}
+                        //  onChange={(e) => setTaskState({ type: 'DateStart', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+                    <FormControl mt={4}>
+                       <FormLabel>End Date</FormLabel>
+                       <Input
+                         name="end-date"
+                         type="date"
+                         value={taskDateEnd}
+                         onChange={(e)=>{ setTaskDateEnd(e.target.value)}}
+                        //  onChange={(e) => setTaskState({ type: 'Date', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+                    <FormControl mt={4}>
+                       <FormLabel>End Time</FormLabel>
+                       <Input
+                         name="end-time"
+                         type="time"
+                         value={taskTimeEnd}
+                         onChange={(e)=>{ setTaskTimeEnd(e.target.value)}}
+                        //  onChange={(e) => setTaskState({ type: 'Date', payload: e.target.value })}
+                        />
+                    </FormControl>
+
                     {/* Tags  */}
 
-                    <Box mb="0.5rem">
+                    <Box mb="0.5rem" mt={4}>
                         <FormLabel>Select Tags</FormLabel>
                         <Select
                             placeholder="Select Tags"

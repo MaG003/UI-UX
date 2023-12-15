@@ -206,8 +206,10 @@ const CreateProject = ({ isOpen, onClose }) => {
                             value={taskState.tags}
                             onChange={(e) => setTaskState({ type: 'tags', payload: e.target.value })}
                         >
-                            <option value="Personal">Public</option>
-                            <option value="Teams">Private</option>
+                            <option value="todo">To Do</option>
+                            <option value="doing">Doing</option>
+                            <option value="done">Done</option>
+                            <option value="overdue">Overdue</option>
                         </Select>
                     </Box>
 
