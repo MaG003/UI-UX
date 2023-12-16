@@ -122,6 +122,7 @@ function Login() {
       .then((response) => {
         console.log(response.data);
         setUserObj(response.data);
+        console.log("check userObj", userObj)
       })
       .catch((e) => {
         console.log(e);
@@ -129,15 +130,15 @@ function Login() {
   }, []);
 
   const SendSignInRequest = () => {
-    let checkEmail = userObj.filter((el) => {
+    let checkEmail = userObj.data.filter((el) => {
       return el.email === email;
     })
     if (checkEmail.length > 0) {
-      let checkPassword = userObj.filter((el) => {
+      let checkPassword = userObj.data.filter((el) => {
         return el.email === email && el.password === password;
       })
       if (checkPassword.length > 0) {
-        let check = userObj.filter((el) => {
+        let check = userObj.data.filter((el) => {
           return el.email === email && el.password === password;
         })
         if (check.length > 0) {
