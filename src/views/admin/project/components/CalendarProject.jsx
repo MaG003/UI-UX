@@ -4,7 +4,6 @@ import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
 import {
   addEvents,
   deleteEvent,
@@ -16,7 +15,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Editable,
   Input,
   Modal,
   ModalBody,
@@ -30,9 +28,7 @@ import {
   Select,
   HStack,
   Box,
-  EditablePreview,
-  EditableInput,
-  Flex
+  Flex,
 } from "@chakra-ui/react";
 import {
   AlertDialog,
@@ -43,7 +39,6 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { LpTaskCard } from "../../list/component/LpTaskCard";
 
 const CalendarHomePage = () => {
   const DragDropCalendar = withDragAndDrop(Calendar);
@@ -60,12 +55,10 @@ const CalendarHomePage = () => {
   }
 
   const [title, setTitle] = useState("");
-  const [Description, setDescription] = useState("");
-  const [TaskStatus, setTaskStatus] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState("00:00:00");
+  const [endTime, setEndTime] = useState("00:00:00");
   const [selectedEvent, setSelectedEvent] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
@@ -84,7 +77,6 @@ const CalendarHomePage = () => {
       dispatch(getEvents());
     }
   }, [dispatch, userEvents.length]);
-
 
   useEffect(() => {
     checkPoints.length > 0 &&
@@ -112,21 +104,20 @@ const CalendarHomePage = () => {
   };
 
   const handleAddEvent = (newEvent) => {
-    // console.log("handleAddEvent:", newEvent);
     dispatch(addEvents(newEvent)).then(() => dispatch(getEvents()));
   };
 
   const handleUpdateEvent = (id, updateEventobj) => {
     console.log(id, updateEventobj);
-    if (updateEventobj.title !== "" &&
+    if (
+      updateEventobj.title !== "" &&
       updateEventobj.start !== "" &&
       updateEventobj.end !== "" &&
       updateEventobj.start_time !== "" &&
       updateEventobj.end_time !== ""
     ) {
       dispatch(updateEvent(id, updateEventobj)).then(() => dispatch(getEvents()));
-    }
-    else {
+    } else {
       toast({
         description: "All fields are required !",
         status: "error",
@@ -156,7 +147,6 @@ const CalendarHomePage = () => {
   };
 
   const handleSelectEvent = (event) => {
-    // console.log("handleSelectEvent:", event);
     setSelectedEvent(event);
     let { start, end } = event;
     start = new Date(start);
@@ -179,7 +169,6 @@ const CalendarHomePage = () => {
   const handleSelectSlot = (event) => {
     setSelectedEvent(undefined);
     const { start, end } = event;
-    // console.log("handleSelectSlot:",event);
     const startMonth = start.getMonth() + 1 < 10 ? `0${start.getMonth() + 1}` : start.getMonth() + 1;
     const startDt = start.getDate() + 1 < 10 ? `0${start.getDate()}` : start.getDate();
     const endMonth = end.getMonth() + 1 < 10 ? `0${end.getMonth() + 1}` : end.getMonth() + 1;
@@ -193,10 +182,7 @@ const CalendarHomePage = () => {
   };
 
   const handleSubmitEvent = () => {
-    // console.log("Selected event:-", selectedEvent);
-
     if (selectedEvent.id) {
-      console.log(123);
       const id = selectedEvent.id;
       var time1 = selectedEvent.start_time;
       var time2 = selectedEvent.end_time;
@@ -204,29 +190,25 @@ const CalendarHomePage = () => {
         title: title,
         start: new Date(startDate),
         end: new Date(endDate),
-        start_time: (`${startTime}${amPm}`) || time1,
-        end_time: (`${endTime}${amPm}`) || time2,
+        start_time: `${startTime}${amPm}` || time1,
+        end_time: `${endTime}${amPm}` || time2,
         description: "",
         userID: localStorage.getItem("userEmail"),
       };
       handleUpdateEvent(id, updateEvent);
-    }
-    else {
-      console.log(456);
-
+    } else {
       if (title !== "" && startDate !== "" && endDate !== "" && startTime !== "" && endTime !== "") {
         const newEvent = {
           title: title,
           start: new Date(startDate),
           end: new Date(endDate),
-          start_time: (`${startTime}${amPm}`),
-          end_time: (`${endTime}${amPm}`),
+          start_time: `${startTime}${amPm}`,
+          end_time: `${endTime}${amPm}`,
           description: "",
           userID: localStorage.getItem("userEmail"),
         };
         handleAddEvent(newEvent);
-      }
-      else {
+      } else {
         toast({
           description: "All fields are required !",
           status: "error",
@@ -249,34 +231,14 @@ const CalendarHomePage = () => {
     }
   };
 
-  // const history = useHistory();
-
-  // const handleRedirect = () => {
-  //   history.push('/admin/list-task');
-  // };
-  
-  const generateJsonData = () => {
-    const jsonData = {
-      title: title,
-      description: Description,
-      task_status: TaskStatus,
-      DateStart: startDate,
-      TimeStart: startTime,
-      DateEnd: endDate,
-      TimeEnd: endTime
-    };
-  
-    return jsonData;
-  };
-
   return (
     <div
       style={{
         textAlign: "center",
       }}
     >
-      <Flex width={{ base: "90%", sm: "80%", md: "25%", lg: "25%", xl: "25%" }} gap="15px" marginBottom="20px" >
-        <Box width="auto" >
+      <Flex width={{ base: "90%", sm: "80%", md: "25%", lg: "25%", xl: "25%" }} gap="15px" marginBottom="20px">
+        <Box width="auto">
           <Box>
             <Link to="/admin/list-task">
               <Button
@@ -286,7 +248,6 @@ const CalendarHomePage = () => {
               >
                 Show all task
               </Button>
-
             </Link>
           </Box>
         </Box>
@@ -319,13 +280,13 @@ const CalendarHomePage = () => {
           height: "500px",
           width: "100%",
           margin: "0 auto",
-          color: "#422AFB"
+          color: "#422AFB",
         }}
       />
       <Modal isOpen={isOpen || openModal} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create New Task</ModalHeader>
+          <ModalHeader>Add New Task</ModalHeader>
           <ModalCloseButton
             onClick={() => {
               setOpenModal(false);
@@ -333,46 +294,19 @@ const CalendarHomePage = () => {
           />
           <ModalBody padding="5%">
             {/* title  */}
-
-            <FormControl >
+            <FormControl>
               <FormLabel>Title</FormLabel>
               <Input
                 placeholder="Title"
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                autoFocus
               />
-            </FormControl>
-
-            {/* Description  */}
-
-            <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Input
-                placeholder="Enter description"
-                name="Description"
-                value={Description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </FormControl>
-
-            {/* Task Status */}
-            <FormControl mt={4}>
-              <FormLabel>Task Status</FormLabel>
-              <Select
-                value={TaskStatus}
-                onChange={(e) => setTaskStatus(e.target.value)}
-              >
-                <option value="todo">To Do</option>
-                <option value="doing">Doing</option>
-                <option value="done">Done</option>
-                <option value="overdue">Overdue</option>
-              </Select>
             </FormControl>
 
             {/* Start Date  */}
-
-            <FormControl mt={4}>
+            <FormControl>
               <FormLabel>Start Date</FormLabel>
               <Input
                 name="start-date"
@@ -382,19 +316,8 @@ const CalendarHomePage = () => {
               />
             </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Start Time</FormLabel>
-              <Input
-                name="start-time"
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </FormControl>
-
             {/* End Date  */}
-
-            <FormControl mt={4}>
+            <FormControl>
               <FormLabel>End Date</FormLabel>
               <Input
                 name="end-date"
@@ -403,24 +326,38 @@ const CalendarHomePage = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>End Time</FormLabel>
-              <Input
-                name="end-time"
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </FormControl>
           </ModalBody>
 
+          <FormControl width="90%" margin="auto">
+            <FormLabel>Start Time</FormLabel>
+            <Input
+              name="start-time"
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl width="90%" margin="auto">
+            <FormLabel>End Time</FormLabel>
+            <Input
+              name="end-time"
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl width="90%" margin="auto">
+            <FormLabel>PM/AM</FormLabel>
+            <Select value={amPm} onChange={(e) => setAmPm(e.target.value)}>
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </Select>
+          </FormControl>
+
           <ModalFooter>
-            <Button
-              colorScheme="blue"
-              mr={3}
-              onClick={() => handleSubmitEvent()}
-            >
+            <Button colorScheme="blue" mr={3} onClick={() => handleSubmitEvent()}>
               {showDeleteBtn ? "Edit" : "Submit"}
             </Button>
 
@@ -429,20 +366,14 @@ const CalendarHomePage = () => {
                 <Button variant="ghost" onClick={onOpen} bg={"red.400"}>
                   Delete
                 </Button>
-                <AlertDialog
-                  isOpen={isOpen}
-                  leastDestructiveRef={cancelRef}
-                  onClose={onClose}
-                >
+                <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
                   <AlertDialogOverlay>
                     <AlertDialogContent>
                       <AlertDialogHeader fontSize="lg" fontWeight="bold">
                         Delete Task
                       </AlertDialogHeader>
 
-                      <AlertDialogBody>
-                        Bạn có chắc muốn xóa task
-                      </AlertDialogBody>
+                      <AlertDialogBody>Bạn có chắc muốn xóa task</AlertDialogBody>
 
                       <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={onClose}>
@@ -467,16 +398,6 @@ const CalendarHomePage = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      {/* <LpTaskCard
-        title={title}
-        description={Description}
-        task_status={TaskStatus}
-        DateStart={startDate}
-        TimeStart={startTime}
-        DateEnd={endDate}
-        TimeEnd={endTime}
-      /> */}
     </div>
   );
 };

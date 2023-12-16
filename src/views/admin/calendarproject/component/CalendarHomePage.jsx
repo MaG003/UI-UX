@@ -3,8 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
+import { Redirect ,useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import {
   addEvents,
   deleteEvent,
@@ -16,7 +15,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Editable,
   Input,
   Modal,
   ModalBody,
@@ -30,8 +28,6 @@ import {
   Select,
   HStack,
   Box,
-  EditablePreview,
-  EditableInput,
   Flex
 } from "@chakra-ui/react";
 import {
@@ -43,7 +39,6 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { LpTaskCard } from "../../list/component/LpTaskCard";
 
 const CalendarHomePage = () => {
   const DragDropCalendar = withDragAndDrop(Calendar);
@@ -60,17 +55,15 @@ const CalendarHomePage = () => {
   }
 
   const [title, setTitle] = useState("");
-  const [Description, setDescription] = useState("");
-  const [TaskStatus, setTaskStatus] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState("00:00:00");
+  const [endTime, setEndTime] = useState("00:00:00");
   const [selectedEvent, setSelectedEvent] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const [amPm, setAmPm] = useState("AM");
-  const [status, setStatus] = useState("");
+  const [status,setStatus] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
@@ -118,15 +111,15 @@ const CalendarHomePage = () => {
 
   const handleUpdateEvent = (id, updateEventobj) => {
     console.log(id, updateEventobj);
-    if (updateEventobj.title !== "" &&
-      updateEventobj.start !== "" &&
-      updateEventobj.end !== "" &&
-      updateEventobj.start_time !== "" &&
-      updateEventobj.end_time !== ""
-    ) {
+    if(updateEventobj.title !== "" && 
+    updateEventobj.start !== "" && 
+    updateEventobj.end !== "" &&
+    updateEventobj.start_time !== "" &&
+    updateEventobj.end_time !== "" 
+    ){
       dispatch(updateEvent(id, updateEventobj)).then(() => dispatch(getEvents()));
     }
-    else {
+    else{
       toast({
         description: "All fields are required !",
         status: "error",
@@ -225,7 +218,7 @@ const CalendarHomePage = () => {
           userID: localStorage.getItem("userEmail"),
         };
         handleAddEvent(newEvent);
-      }
+      } 
       else {
         toast({
           description: "All fields are required !",
@@ -254,20 +247,6 @@ const CalendarHomePage = () => {
   // const handleRedirect = () => {
   //   history.push('/admin/list-task');
   // };
-  
-  const generateJsonData = () => {
-    const jsonData = {
-      title: title,
-      description: Description,
-      task_status: TaskStatus,
-      DateStart: startDate,
-      TimeStart: startTime,
-      DateEnd: endDate,
-      TimeEnd: endTime
-    };
-  
-    return jsonData;
-  };
 
   return (
     <div
@@ -277,8 +256,8 @@ const CalendarHomePage = () => {
     >
       <Flex width={{ base: "90%", sm: "80%", md: "25%", lg: "25%", xl: "25%" }} gap="15px" marginBottom="20px" >
         <Box width="auto" >
-          <Box>
-            <Link to="/admin/list-task">
+            <Box>
+              <Link to="/admin/list-task">
               <Button
                 backgroundColor="#422AFB"
                 _hover={{ color: "black", backgroundColor: "gray.100" }}
@@ -286,9 +265,9 @@ const CalendarHomePage = () => {
               >
                 Show all task
               </Button>
-
-            </Link>
-          </Box>
+              
+              </Link>
+            </Box>
         </Box>
         <Box width="auto">
           <Box>
@@ -319,13 +298,13 @@ const CalendarHomePage = () => {
           height: "500px",
           width: "100%",
           margin: "0 auto",
-          color: "#422AFB"
+          color:"#422AFB"
         }}
       />
       <Modal isOpen={isOpen || openModal} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create New Task</ModalHeader>
+          <ModalHeader>Add New Task</ModalHeader>
           <ModalCloseButton
             onClick={() => {
               setOpenModal(false);
@@ -334,45 +313,20 @@ const CalendarHomePage = () => {
           <ModalBody padding="5%">
             {/* title  */}
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Title</FormLabel>
               <Input
                 placeholder="Title"
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                autoFocus
               />
-            </FormControl>
-
-            {/* Description  */}
-
-            <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Input
-                placeholder="Enter description"
-                name="Description"
-                value={Description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </FormControl>
-
-            {/* Task Status */}
-            <FormControl mt={4}>
-              <FormLabel>Task Status</FormLabel>
-              <Select
-                value={TaskStatus}
-                onChange={(e) => setTaskStatus(e.target.value)}
-              >
-                <option value="todo">To Do</option>
-                <option value="doing">Doing</option>
-                <option value="done">Done</option>
-                <option value="overdue">Overdue</option>
-              </Select>
             </FormControl>
 
             {/* Start Date  */}
 
-            <FormControl mt={4}>
+            <FormControl>
               <FormLabel>Start Date</FormLabel>
               <Input
                 name="start-date"
@@ -382,19 +336,9 @@ const CalendarHomePage = () => {
               />
             </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Start Time</FormLabel>
-              <Input
-                name="start-time"
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </FormControl>
-
             {/* End Date  */}
 
-            <FormControl mt={4}>
+            <FormControl>
               <FormLabel>End Date</FormLabel>
               <Input
                 name="end-date"
@@ -403,17 +347,38 @@ const CalendarHomePage = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>End Time</FormLabel>
-              <Input
-                name="end-time"
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </FormControl>
           </ModalBody>
+
+          <FormControl width="90%" margin="auto">
+            <FormLabel>Start Time</FormLabel>
+            <Input
+              name="start-time"
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl width="90%" margin="auto">
+            <FormLabel>End Time</FormLabel>
+            <Input
+              name="end-time"
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl width="90%" margin="auto">
+            <FormLabel>PM/AM</FormLabel>
+            <Select
+              value={amPm}
+              onChange={(e) => setAmPm(e.target.value)}
+            >
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </Select>
+          </FormControl>
 
           <ModalFooter>
             <Button
@@ -467,16 +432,6 @@ const CalendarHomePage = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      {/* <LpTaskCard
-        title={title}
-        description={Description}
-        task_status={TaskStatus}
-        DateStart={startDate}
-        TimeStart={startTime}
-        DateEnd={endDate}
-        TimeEnd={endTime}
-      /> */}
     </div>
   );
 };

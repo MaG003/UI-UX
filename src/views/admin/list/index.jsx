@@ -85,7 +85,7 @@ export default function MyListTask(){
                     height="auto"
                     border="1px solid rgba(0,0,0,0.3)"
                 >
-                    <Box backgroundColor="red.500">
+                    <Box backgroundColor="yellow.300">
                         <Text textAlign="center" fontWeight="bold">
                             To Do
                         </Text>
@@ -130,7 +130,7 @@ export default function MyListTask(){
                     height="auto"
                     border="1px solid rgba(0,0,0,0.3)"
                 >
-                    <Box backgroundColor="yellow.500">
+                    <Box backgroundColor="teal.300">
                         <Text textAlign="center" fontWeight="bold">
                             Doing
                         </Text>
@@ -174,7 +174,7 @@ export default function MyListTask(){
                     height="auto"
                     border="1px solid rgba(0,0,0,0.3)"
                 >
-                    <Box backgroundColor="teal.500">
+                    <Box backgroundColor="green.500">
                         <Text textAlign="center" fontWeight="bold">
                             Done
                         </Text>
@@ -217,7 +217,7 @@ export default function MyListTask(){
                     height="auto"
                     border="1px solid rgba(0,0,0,0.3)"
                 >
-                    <Box backgroundColor="teal.100">
+                    <Box backgroundColor="red.500">
                         <Text textAlign="center" fontWeight="bold">
                             Overdue
                         </Text>

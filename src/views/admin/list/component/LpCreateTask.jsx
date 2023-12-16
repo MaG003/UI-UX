@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate,useHistory } from "react-router-dom";
+import { useLocation, useNavigate, useHistory } from "react-router-dom";
 import { createTasks, getTasks } from "../../../../Redux/AppContext/actions";
 
 const initialTaskState = {
@@ -30,7 +30,10 @@ const initialTaskState = {
     description: "",
     task_status: "todo",
     tags: ["Teams"],
-    Date: "",
+    DateStart: "",
+    DateEnd: "",
+    TimeStart: "",
+    TimeEnd: "",
     userID: "",
     isValidate: false,
 };
@@ -61,10 +64,28 @@ const taskReducer = (state, action) => {
                 tags: action.payload,
             };
 
-        case 'Date':
+        case 'DateStart':
             return {
                 ...state,
-                Date: action.payload,
+                DateStart: action.payload,
+            };
+
+        case 'DateEnd':
+            return {
+                ...state,
+                DateEnd: action.payload,
+            };
+
+        case 'TimeStart':
+            return {
+                ...state,
+                TimeStart: action.payload,
+            };
+
+        case 'TimeEnd':
+            return {
+                ...state,
+                TimeEnd: action.payload,
             };
         case 'userID':
             return {
@@ -85,43 +106,45 @@ const LpCreateTask = ({ isOpen, onClose }) => {
     const location = useLocation();
     const navigate = useHistory();
     const toast = useToast();
-    if(taskState.userID === ""){
+    if (taskState.userID === "") {
         setTaskState({ type: 'userID', payload: localStorage.getItem("userEmail") });
     }
 
 
     const createTaskHandler = () => {
-        if(taskState.title !== "" && 
-        taskState.description !=="" && 
-        taskState.task_status !== "" && 
-        taskState.tags !== "" && 
-        taskState.Date !== ""){
+        if (taskState.title !== "" &&
+            taskState.description !== "" &&
+            taskState.taskStatus !== "" &&
+            taskState.DateStart !== "" &&
+            taskState.TimeStart !== "" &&
+            taskState.DateEnd !== "" &&
+            taskState.TimeEnd !== "") {
 
             console.log(taskState);
 
             dispatch(createTasks(taskState))
-            .then(() => dispatch(getTasks()))
-            .then(() => toast({
-                title: 'Task Created.',
-                description: "We've created your task for you.",
-                status: 'success',
-                duration: 2000,
-                position: "top",
-                isClosable: true,
-              }))
-            .then(() => {
-                if(location.pathname !== "//#/admin/list-task"){
-                    navigate.push("/admin/list-task");
-                    onClose()
-                }
-                else{
-                    navigate.push("/admin/list-task");
-                    onClose()
-                };
-                // onClose()
-            });
+                .then(() => dispatch(getTasks()))
+                .then(() => toast({
+                    title: 'Task Created.',
+                    description: "We've created your task for you.",
+                    status: 'success',
+                    duration: 2000,
+                    position: "top",
+                    isClosable: true,
+                }))
+                .then(() => {
+                    if (location.pathname !== "//#/admin/list-task") {
+                        navigate.push("/admin/list-task");
+                        onClose()
+                    }
+                    else {
+                        navigate.push("/admin/list-task");
+                        onClose()
+                    };
+                    // onClose()
+                });
         }
-        else{
+        else {
             toast({
                 title: 'All fields are not there!.',
                 description: "Please enter all the fileds.",
@@ -129,7 +152,7 @@ const LpCreateTask = ({ isOpen, onClose }) => {
                 duration: 2000,
                 position: "top",
                 isClosable: true,
-              })
+            })
         }
         dispatch(getTasks())
     };
@@ -155,68 +178,79 @@ const LpCreateTask = ({ isOpen, onClose }) => {
 
                     <FormControl mt={4}>
                         <FormLabel>Description</FormLabel>
-                            <Input
-                                placeholder="Enter description"
-                                value={taskState.description}
-                                onChange={(e) => setTaskState({ type: 'description', payload: e.target.value })}
-                            />
-                    </FormControl>
-
-                    {/* <FormControl mt={4}>
-                        <FormLabel>Date</FormLabel>
-                            <Input
-                                placeholder="Enter date"
-                                value={taskState.Date}
-                                onChange={(e) => setTaskState({ type: 'Date', payload: e.target.value })}
-                            />
-                    </FormControl> */}
-                    <FormControl mt={4}>
-                       <FormLabel>End Date</FormLabel>
-                       <Input
-                         name="start-date"
-                         type="date"
-                         value={taskState.Date}
-                         onChange={(e) => setTaskState({ type: 'Date', payload: e.target.value })}
+                        <Input
+                            placeholder="Enter description"
+                            value={taskState.description}
+                            onChange={(e) => setTaskState({ type: 'description', payload: e.target.value })}
                         />
                     </FormControl>
 
-                    {/* Task Status  */}
-
-                    <Box mb="0.5rem">
+                    {/* Task Status */}
+                    <FormControl mt={4}>
                         <FormLabel>Task Status</FormLabel>
                         <Select
-                            placeholder="Select Status"
-                            value={taskState.task_status}
-                            onChange={(e) => setTaskState({ type: 'task_status', payload: e.target.value })}
+                            value={taskState.taskStatus}
+                            onChange={(e) => setTaskState({ type: 'taskStatus', payload: e.target.value })}
                         >
-                            <option value="todo">Todo</option>
-                            <option value="progress">In-Progress</option>
+                            <option value="todo">To Do</option>
+                            <option value="doing">Doing</option>
                             <option value="done">Done</option>
+                            <option value="overdue">Overdue</option>
                         </Select>
-                    </Box>
+                    </FormControl>
 
-                    {/* Tags  */}
+                    {/* Start Date  */}
 
-                    <Box mb="0.5rem">
-                        <FormLabel>Select Tags</FormLabel>
-                        <Select
-                            placeholder="Select Tags"
-                            value={taskState.tags}
-                            onChange={(e) => setTaskState({ type: 'tags', payload: e.target.value })}
-                        >
-                            <option value="Personal">Personal</option>
-                            <option value="Teams">Teams</option>
-                        </Select>
-                    </Box>
+                    <FormControl mt={4}>
+                        <FormLabel>Start Date</FormLabel>
+                        <Input
+                            name="start-date"
+                            type="date"
+                            value={taskState.DateStart}
+                            onChange={(e) => setTaskState({ type: 'DateStart', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+                    <FormControl mt={4}>
+                        <FormLabel>Start Time</FormLabel>
+                        <Input
+                            name="start-time"
+                            type="time"
+                            value={taskState.TimeStart}
+                            onChange={(e) => setTaskState({ type: 'TimeStart', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+                    {/* End Date  */}
+
+                    <FormControl mt={4}>
+                        <FormLabel>End Date</FormLabel>
+                        <Input
+                            name="end-date"
+                            type="date"
+                            value={taskState.DateEnd}
+                            onChange={(e) => setTaskState({ type: 'DateEnd', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+
+                    <FormControl mt={4}>
+                        <FormLabel>End Time</FormLabel>
+                        <Input
+                            name="end-time"
+                            type="time"
+                            value={taskState.TimeEnd}
+                            onChange={(e) => setTaskState({ type: 'TimeEnd', payload: e.target.value })}
+                        />
+                    </FormControl>
 
                 </ModalBody>
-
                 <ModalFooter>
                     <Button colorScheme='blue' onClick={createTaskHandler}>Create Task</Button>
                 </ModalFooter>
 
             </ModalContent>
-        </Modal>
+        </Modal >
     )
 };
 
