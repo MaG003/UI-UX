@@ -1,6 +1,8 @@
+import {Router, Route} from "react-router-dom"
 // Chakra imports
 import tableDataDevelopment from "./variables/tableDataDevelopment.json";
 import DevelopmentTable from "./components/DevelopmentTable";
+
 import {
   columnsDataDevelopment,
 } from "./variables/columnsData";
@@ -9,7 +11,9 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import React from "react";
+import CalendarProject from "../calendarproject/index"
 
+console.log(CalendarProject)
 export default function Settings() {
   // Lọc ra những dự án có thuộc tính ondelete bằng 0
   const filteredData = tableDataDevelopment.filter((project) => project.ondelete === 0);
@@ -30,6 +34,10 @@ export default function Settings() {
           width="100%"
         />
       </SimpleGrid>
+      
     </Box>
+
+
+
   );
 }

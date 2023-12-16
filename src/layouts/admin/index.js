@@ -5,9 +5,11 @@ import Navbar from '../../Components/navbar/NavbarAdmin';
 import Sidebar from "../../Components/sidebar/Sidebar"
 import {SidebarContext} from "../../contexts/SidebarContext"
 import React, { useState } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, useParams } from 'react-router-dom';
 import routes from "../../Routes/Route"
 import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
+import MyCalendarProject from "../../views/admin/calendar/index"
+
 
 // Custom Chakra theme
 export default function Dashboard(props) {
@@ -97,7 +99,10 @@ export default function Dashboard(props) {
 			}
 		});
 	};
-	console.log(routes);
+
+	const {id} = useParams();
+	console.log(id)
+	//console.log(routes);
 	document.documentElement.dir = 'ltr';
 	const { onOpen } = useDisclosure();
 	document.documentElement.dir = 'ltr';
@@ -141,6 +146,10 @@ export default function Dashboard(props) {
 							<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
 								<Switch>
 									{getRoutes(routes)}
+
+									<Route path="/admin/calendarprojects/:id" component={MyCalendarProject} key={id}/>
+								
+									
 									{/* <Redirect from='/mytask' to='/mytask/dashboard' /> */}
 								</Switch>
 							</Box>
@@ -148,6 +157,7 @@ export default function Dashboard(props) {
 					</Box>
 				</SidebarContext.Provider>
 			</Box>
+			<Route path="/admin/calendarprojects/:id" component={MyCalendarProject} key={id}/>
 		</Box>
 	);
 }

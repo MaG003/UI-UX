@@ -22,7 +22,7 @@ const routes = [
     component: MyDashboard,
   },
   {
-    name: "Calendar Project",
+    name: "MyCalendar",
     layout: "/admin",
     path: "/calendar",
     icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,

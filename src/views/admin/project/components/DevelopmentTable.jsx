@@ -40,6 +40,7 @@ import { AndroidLogo, AppleLogo, WindowsLogo } from "../../../../Components/icon
 import Menu from "../../../../Components/menu/MainMenu";
 import { CreateProject } from "./CreateProject";
 import React, { useMemo } from "react";
+import {Link } from "react-router-dom";
 import {
   useGlobalFilter,
   usePagination,
@@ -139,11 +140,15 @@ export default function DevelopmentTable(props) {
             if (row.original.ondelete === 1) {
               return null;
             }
+            const rowId = `row-${index}`
+            const idProject = {index}
+            
             return (
               <Box
                 key={index}
                 as={Tr}
-                {...row.getRowProps()}
+
+                {...row.getRowProps({id: rowId})}
                 borderColor={borderColor}
                 p="10px" // Thêm padding cho ô hình chữ nhật
                 borderRadius="md" // Thêm bo góc cho ô hình chữ nhật
@@ -152,26 +157,28 @@ export default function DevelopmentTable(props) {
                   let data = "";
                   if (cell.column.Header === "NAME") {
                     data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
-                      </Text>
+                      <Link to={`/admin/calendarproject/${row.id}`}>
+                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                          {cell.value}
+                        </Text>
+                      </Link>
                     );
                   }
                   else if (cell.column.Header === "MEMBER") {
                     data = (
                       <Flex align='center'>
-                        {cell.value.map((item, key) => {
+                        {cell.value.map((item, index) => {
                           if (item === "apple") {
                             return (
-                              <Avatar w='20px' h='20px' name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+                              <Avatar key={index} w='20px' h='20px' name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
                             );
                           } else if (item === "android") {
                             return (
-                              <Avatar w='20px' h='20px' name='Ryan Florence' src='https://bit.ly/ryan-florence' />
+                              <Avatar key={index} w='20px' h='20px' name='Ryan Florence' src='https://bit.ly/ryan-florence' />
                             );
                           } else if (item === "windows") {
                             return (
-                              <Avatar w='20px' h='20px' name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
+                              <Avatar key={index} w='20px' h='20px' name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
                             );
                           }
                         })}

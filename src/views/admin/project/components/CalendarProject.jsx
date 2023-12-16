@@ -40,7 +40,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-const CalendarHomePage = () => {
+const CalendarProject = () => {
   const DragDropCalendar = withDragAndDrop(Calendar);
   let userEvents = useSelector((store) => store.AppReducer.events);
   const checkPoints = useSelector((store) => store.AppReducer.checkPoint);
@@ -402,4 +402,4 @@ const CalendarHomePage = () => {
   );
 };
 
-export default CalendarHomePage;
+export default CalendarProject;

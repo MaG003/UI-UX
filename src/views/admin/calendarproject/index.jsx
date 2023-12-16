@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
     Box,
   } from "@chakra-ui/react";
-import CalendarHomePage from "../calendarproject/component/CalendarHomePage"
+import CalendarHomePage from "../calendar/component/CalendarHomePage"
 export default function CalendarProject(){
     return (
         <>

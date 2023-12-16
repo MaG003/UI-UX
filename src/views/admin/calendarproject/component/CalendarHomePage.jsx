@@ -3,7 +3,8 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect ,useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
 import {
   addEvents,
   deleteEvent,
@@ -15,6 +16,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Editable,
   Input,
   Modal,
   ModalBody,
@@ -28,6 +30,8 @@ import {
   Select,
   HStack,
   Box,
+  EditablePreview,
+  EditableInput,
   Flex
 } from "@chakra-ui/react";
 import {
@@ -63,7 +67,7 @@ const CalendarHomePage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const [amPm, setAmPm] = useState("AM");
-  const [status,setStatus] = useState("");
+  const [status, setStatus] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
@@ -111,15 +115,15 @@ const CalendarHomePage = () => {
 
   const handleUpdateEvent = (id, updateEventobj) => {
     console.log(id, updateEventobj);
-    if(updateEventobj.title !== "" && 
-    updateEventobj.start !== "" && 
-    updateEventobj.end !== "" &&
-    updateEventobj.start_time !== "" &&
-    updateEventobj.end_time !== "" 
-    ){
+    if (updateEventobj.title !== "" &&
+      updateEventobj.start !== "" &&
+      updateEventobj.end !== "" &&
+      updateEventobj.start_time !== "" &&
+      updateEventobj.end_time !== ""
+    ) {
       dispatch(updateEvent(id, updateEventobj)).then(() => dispatch(getEvents()));
     }
-    else{
+    else {
       toast({
         description: "All fields are required !",
         status: "error",
@@ -218,7 +222,7 @@ const CalendarHomePage = () => {
           userID: localStorage.getItem("userEmail"),
         };
         handleAddEvent(newEvent);
-      } 
+      }
       else {
         toast({
           description: "All fields are required !",
@@ -256,8 +260,8 @@ const CalendarHomePage = () => {
     >
       <Flex width={{ base: "90%", sm: "80%", md: "25%", lg: "25%", xl: "25%" }} gap="15px" marginBottom="20px" >
         <Box width="auto" >
-            <Box>
-              <Link to="/admin/list-task">
+          <Box>
+            <Link to="/admin/list-task">
               <Button
                 backgroundColor="#422AFB"
                 _hover={{ color: "black", backgroundColor: "gray.100" }}
@@ -265,9 +269,9 @@ const CalendarHomePage = () => {
               >
                 Show all task
               </Button>
-              
-              </Link>
-            </Box>
+
+            </Link>
+          </Box>
         </Box>
         <Box width="auto">
           <Box>
@@ -298,7 +302,7 @@ const CalendarHomePage = () => {
           height: "500px",
           width: "100%",
           margin: "0 auto",
-          color:"#422AFB"
+          color: "#422AFB"
         }}
       />
       <Modal isOpen={isOpen || openModal} onClose={onClose}>
@@ -347,7 +351,20 @@ const CalendarHomePage = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </FormControl>
+            
+            <FormControl>
+              <FormLabel>Add Member</FormLabel>
+              <Input
+                placeholder="Add Member"
+                name="Add Member"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                autoFocus
+              />
+            </FormControl>
           </ModalBody>
+
+          
 
           <FormControl width="90%" margin="auto">
             <FormLabel>Start Time</FormLabel>
