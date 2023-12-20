@@ -2,7 +2,6 @@
 import {
     Box,
     Button,
-    Checkbox,
     Flex,
     FormControl,
     FormLabel,
@@ -19,46 +18,18 @@ import { HSeparator } from "../../../Components/separator/Separator";
 import DefaultAuth from "../../../layouts/auth/Default"
 // // Assets
 import illustration from "../../../assets/img/auth/auth.png"
-
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import React, { useEffect, useState } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-import { Loginfunction } from "../../../Redux/AuthContext/actions";
+import { useHistory } from "react-router-dom"
+import { useSelector } from "react-redux";
 
-import { saveData } from "../../../Utils/localStorageData";
 
-import { useReducer } from "react";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
-import { useHistory } from "react-router-dom";
 
-const userIsValidateInitialState = {
-    mailID: "",
-    checkValidate: true,
-};
-
-const userIsvalidateReducer = (state, action) => {
-    switch (action.type) {
-        case "mailID":
-            return {
-                ...state,
-                mailID: action.payload,
-            };
-        case "checkValidate":
-            return {
-                ...state,
-                checkValidate: action.payload,
-            };
-        default:
-            return state;
-    }
-};
-
-function SignUp() {
+function Signup() {
     // Chakra color mode
     const textColor = useColorModeValue("navy.700", "white");
     const textColorSecondary = "gray.400";
@@ -78,13 +49,8 @@ function SignUp() {
     const [show, setShow] = React.useState(false);
     const handleClick = () => setShow(!show);
 
-
-    const [userValidateState, setUserValidateState] = useReducer(
-        userIsvalidateReducer,
-        userIsValidateInitialState
-    );
-    const [showPassword, setShowPassword] = useState(false);
-    const [userObj, setUserObj] = useState([]);
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { isAuth } = useSelector((state) => {
@@ -92,70 +58,52 @@ function SignUp() {
             isAuth: state.AuthReducer.isAuth,
         };
     });
-    // console.log(isAuth);
-
-    const dispatch = useDispatch();
     // const navigate = useNavigate();
     const history = useHistory();
 
     useEffect(() => {
         if (isAuth) {
             const redirectTimeout = setTimeout(() => {
-                history.push("/admin/dashboard");
+                history.push("/auth/sign-in");
             }, 1500);
 
             return () => clearTimeout(redirectTimeout); // Xóa timeout nếu component bị unmount trước khi timeout kết thúc
         }
     }, [isAuth, history]);
 
-    // useEffect(() => {
-    //   if (isAuth) {
-    //     setTimeout(() => {
-    //       Redirect("/mytask/dashboard");
-    //     }, 1500);
-    //   }
-    // }, [isAuth]);
-
-    useEffect(() => {
-        axios
-            .get("http://localhost:3333/api/user/list")
-            .then((response) => {
-                console.log(response.data);
-                setUserObj(response.data);
-                console.log("check userObj", userObj)
+    const SendSignUpRequest = () => {
+        if (!name || !phone || !email || !password) {
+            // alert("nhap day du thong tin");
+        } else {
+            const data = {
+                userName: name,
+                email: email,
+                password: password,
+                phone: phone
+            };
+            // gửi request lên server
+            axios({
+                method: "post",
+                url: "http://localhost:3333/api/user/register",
+                data: data,
             })
-            .catch((e) => {
-                console.log(e);
-            });
-    }, []);
-
-    const SendSignInRequest = () => {
-        let checkEmail = userObj.data.filter((el) => {
-            return el.email === email;
-        })
-        if (checkEmail.length > 0) {
-            let checkPassword = userObj.data.filter((el) => {
-                return el.email === email && el.password === password;
-            })
-            if (checkPassword.length > 0) {
-                let check = userObj.data.filter((el) => {
-                    return el.email === email && el.password === password;
+                .then((res) => {
+                    console.log(res);
+                    if (res.status === 200) {
+                        alert("Đăng ký thành công");
+                        history.push("/auth/sign-in");
+                    }
                 })
-                if (check.length > 0) {
-                    saveData("loggedUser", { ...check[0], password });
-                    // addCheckPointHandler();
-                    dispatch(
-                        Loginfunction({
-                            ...check[0],
-                        })
-                    );
-                    localStorage.setItem("userEmail", email);
-                }
-            }
+                .catch((err) => {
+                    console.log(err);
+                    alert("Đăng ký thất bại");
+                });
+            setName("");
+            setPhone("");
             setEmail("");
             setPassword("");
-        };
-    }
+        }
+    };
 
     return (
         <>
@@ -174,15 +122,15 @@ function SignUp() {
                     flexDirection='column'>
                     <Box me='auto'>
                         <Heading color={textColor} fontSize='36px' mb='10px'>
-                            Sign Up
+                            Register
                         </Heading>
                         <Text
-                            mb='36px'
+                            mb='30px'
                             ms='4px'
                             color={textColorSecondary}
                             fontWeight='400'
                             fontSize='md'>
-                            Enter your email and password to sign up!
+                            Create your account to log in!
                         </Text>
                     </Box>
                     <Flex
@@ -209,7 +157,7 @@ function SignUp() {
                             _active={googleActive}
                             _focus={googleActive}>
                             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
-                            Sign in with Google
+                            Register with Google
                         </Button>
                         <Flex align='center' mb='25px'>
                             <HSeparator />
@@ -219,6 +167,50 @@ function SignUp() {
                             <HSeparator />
                         </Flex>
                         <FormControl>
+                            <FormLabel
+                                display='flex'
+                                ms='4px'
+                                fontSize='sm'
+                                fontWeight='500'
+                                color={textColor}
+                                mb='8px'>
+                                Name<Text color={brandStars}>*</Text>
+                            </FormLabel>
+                            <Input
+                                isRequired={true}
+                                variant='auth'
+                                fontSize='sm'
+                                ms={{ base: "0px", md: "0px" }}
+                                type='text'
+                                placeholder='enter your name'
+                                mb='24px'
+                                fontWeight='500'
+                                size='lg'
+                                onChange={(e) => setName(e.target.value)}
+                            />
+
+                            <FormLabel
+                                display='flex'
+                                ms='4px'
+                                fontSize='sm'
+                                fontWeight='500'
+                                color={textColor}
+                                mb='8px'>
+                                Phone<Text color={brandStars}>*</Text>
+                            </FormLabel>
+                            <Input
+                                isRequired={true}
+                                variant='auth'
+                                fontSize='sm'
+                                ms={{ base: "0px", md: "0px" }}
+                                type='text'
+                                placeholder='+84*********'
+                                mb='24px'
+                                fontWeight='500'
+                                size='lg'
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+
                             <FormLabel
                                 display='flex'
                                 ms='4px'
@@ -270,67 +262,43 @@ function SignUp() {
                                     />
                                 </InputRightElement>
                             </InputGroup>
-                            {/* <Flex justifyContent='space-between' align='center' mb='24px'>
-                                <FormControl display='flex' alignItems='center'>
-                                    <Checkbox
-                                        id='remember-login'
-                                        colorScheme='brandScheme'
-                                        me='10px'
-                                    />
-                                    <FormLabel
-                                        htmlFor='remember-login'
-                                        mb='0'
-                                        fontWeight='normal'
-                                        color={textColor}
-                                        fontSize='sm'>
-                                        Keep me logged in
-                                    </FormLabel>
-                                </FormControl>
-                                <NavLink to='/auth/forgot-password'>
-                                    <Text
-                                        color={textColorBrand}
-                                        fontSize='sm'
-                                        w='124px'
-                                        fontWeight='500'>
-                                        Forgot password?
-                                    </Text>
-                                </NavLink>
-                            </Flex> */}
+
                             <Button
                                 fontSize='sm'
                                 variant='brand'
                                 fontWeight='500'
                                 w='100%'
                                 h='50'
-                                mb='24px'
-                                onClick={SendSignInRequest}
+                                mb='10px'
+                                mt='15px'
+                                onClick={SendSignUpRequest}
                             >
-                                Sign Up
+                                Register
                             </Button>
                         </FormControl>
-                        {/* <Flex
+                        <Flex
                             flexDirection='column'
                             justifyContent='center'
                             alignItems='start'
                             maxW='100%'
                             mt='0px'>
                             <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-                                Not registered yet?
-                                <NavLink to='/auth/sign-up'>
+                                You already have an account?
+                                <NavLink to='/auth/sign-in'>
                                     <Text
                                         color={textColorBrand}
                                         as='span'
                                         ms='5px'
                                         fontWeight='500'>
-                                        Create an Account
+                                        Log in
                                     </Text>
                                 </NavLink>
                             </Text>
-                        </Flex> */}
+                        </Flex>
                     </Flex>
                 </Flex>
             </DefaultAuth>
         </>
     );
 }
-export default SignUp;
+export default Signup;
