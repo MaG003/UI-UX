@@ -40,7 +40,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-const CalendarHomePage = () => {
+const CalendarProject = () => {
   const DragDropCalendar = withDragAndDrop(Calendar);
   let userEvents = useSelector((store) => store.AppReducer.events);
   const checkPoints = useSelector((store) => store.AppReducer.checkPoint);
@@ -61,6 +61,7 @@ const CalendarHomePage = () => {
   const [endTime, setEndTime] = useState("00:00:00");
   const [selectedEvent, setSelectedEvent] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [openCalendar, setOpenCalendar] = useState(false);
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const [amPm, setAmPm] = useState("AM");
   const [status, setStatus] = useState("");
@@ -237,169 +238,173 @@ const CalendarHomePage = () => {
         textAlign: "center",
       }}
     >
-      <Flex width={{ base: "90%", sm: "80%", md: "25%", lg: "25%", xl: "25%" }} gap="15px" marginBottom="20px">
-        <Box width="auto">
-          <Box>
-            <Link to="/admin/list-task">
-              <Button
-                backgroundColor="#422AFB"
-                _hover={{ color: "black", backgroundColor: "gray.100" }}
-                color="white"
-              >
-                Show all task
-              </Button>
-            </Link>
-          </Box>
-        </Box>
-        <Box width="auto">
-          <Box>
-            <Button
-              backgroundColor="#422AFB"
-              _hover={{ color: "black", backgroundColor: "gray.100" }}
-              color="white"
-              onClick={() => setOpenModal(true)}
-            >
-              Create new task
-            </Button>
-          </Box>
-        </Box>
-      </Flex>
-
-      <DragDropCalendar
-        events={userEvents}
-        localizer={localizer}
-        startAccessor="start"
-        endAccessor="end"
-        onEventDrop={onEventDrop}
-        onEventResize={onEventResize}
-        onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot}
-        selectable
-        resizable
-        style={{
-          height: "500px",
-          width: "100%",
-          margin: "0 auto",
-          color: "#422AFB",
-        }}
-      />
-      <Modal isOpen={isOpen || openModal} onClose={onClose}>
-        <ModalOverlay />
+      <Modal isOpen={isOpen || openCalendar} onClose={onClose}>
         <ModalContent>
-          <ModalHeader>Add New Task</ModalHeader>
-          <ModalCloseButton
-            onClick={() => {
-              setOpenModal(false);
+          <Flex width={{ base: "90%", sm: "80%", md: "25%", lg: "25%", xl: "25%" }} gap="15px" marginBottom="20px">
+            <Box width="auto">
+              <Box>
+                <Link to="/admin/list-task">
+                  <Button
+                    backgroundColor="#422AFB"
+                    _hover={{ color: "black", backgroundColor: "gray.100" }}
+                    color="white"
+                  >
+                    Show all task
+                  </Button>
+                </Link>
+              </Box>
+            </Box>
+            <Box width="auto">
+              <Box>
+                <Button
+                  backgroundColor="#422AFB"
+                  _hover={{ color: "black", backgroundColor: "gray.100" }}
+                  color="white"
+                  onClick={() => setOpenModal(true)}
+                >
+                  Create new task
+                </Button>
+              </Box>
+            </Box>
+          </Flex>
+
+          <DragDropCalendar
+            events={userEvents}
+            localizer={localizer}
+            startAccessor="start"
+            endAccessor="end"
+            onEventDrop={onEventDrop}
+            onEventResize={onEventResize}
+            onSelectEvent={handleSelectEvent}
+            onSelectSlot={handleSelectSlot}
+            selectable
+            resizable
+            style={{
+              height: "500px",
+              width: "100%",
+              margin: "0 auto",
+              color: "#422AFB",
             }}
           />
-          <ModalBody padding="5%">
-            {/* title  */}
-            <FormControl>
-              <FormLabel>Title</FormLabel>
-              <Input
-                placeholder="Title"
-                name="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                autoFocus
+          <Modal isOpen={isOpen || openModal} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add New Task</ModalHeader>
+              <ModalCloseButton
+                onClick={() => {
+                  setOpenModal(false);
+                }}
               />
-            </FormControl>
+              <ModalBody padding="5%">
+                {/* title  */}
+                <FormControl>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    placeholder="Title"
+                    name="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    autoFocus
+                  />
+                </FormControl>
 
-            {/* Start Date  */}
-            <FormControl>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                name="start-date"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </FormControl>
+                {/* Start Date  */}
+                <FormControl>
+                  <FormLabel>Start Date</FormLabel>
+                  <Input
+                    name="start-date"
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </FormControl>
 
-            {/* End Date  */}
-            <FormControl>
-              <FormLabel>End Date</FormLabel>
-              <Input
-                name="end-date"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </FormControl>
-          </ModalBody>
+                {/* End Date  */}
+                <FormControl>
+                  <FormLabel>End Date</FormLabel>
+                  <Input
+                    name="end-date"
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </FormControl>
+              </ModalBody>
 
-          <FormControl width="90%" margin="auto">
-            <FormLabel>Start Time</FormLabel>
-            <Input
-              name="start-time"
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-          </FormControl>
+              <FormControl width="90%" margin="auto">
+                <FormLabel>Start Time</FormLabel>
+                <Input
+                  name="start-time"
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+              </FormControl>
 
-          <FormControl width="90%" margin="auto">
-            <FormLabel>End Time</FormLabel>
-            <Input
-              name="end-time"
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </FormControl>
+              <FormControl width="90%" margin="auto">
+                <FormLabel>End Time</FormLabel>
+                <Input
+                  name="end-time"
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              </FormControl>
 
-          <FormControl width="90%" margin="auto">
-            <FormLabel>PM/AM</FormLabel>
-            <Select value={amPm} onChange={(e) => setAmPm(e.target.value)}>
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </Select>
-          </FormControl>
+              <FormControl width="90%" margin="auto">
+                <FormLabel>PM/AM</FormLabel>
+                <Select value={amPm} onChange={(e) => setAmPm(e.target.value)}>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </Select>
+              </FormControl>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => handleSubmitEvent()}>
-              {showDeleteBtn ? "Edit" : "Submit"}
-            </Button>
-
-            {showDeleteBtn && (
-              <>
-                <Button variant="ghost" onClick={onOpen} bg={"red.400"}>
-                  Delete
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={() => handleSubmitEvent()}>
+                  {showDeleteBtn ? "Edit" : "Submit"}
                 </Button>
-                <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
-                  <AlertDialogOverlay>
-                    <AlertDialogContent>
-                      <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        Delete Task
-                      </AlertDialogHeader>
 
-                      <AlertDialogBody>Bạn có chắc muốn xóa task</AlertDialogBody>
+                {showDeleteBtn && (
+                  <>
+                    <Button variant="ghost" onClick={onOpen} bg={"red.400"}>
+                      Delete
+                    </Button>
+                    <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+                      <AlertDialogOverlay>
+                        <AlertDialogContent>
+                          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Task
+                          </AlertDialogHeader>
 
-                      <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onClose}>
-                          Cancel
-                        </Button>
-                        <Button
-                          colorScheme="red"
-                          onClick={() => {
-                            onClose();
-                            handleDeleteEvent();
-                          }}
-                          ml={3}
-                        >
-                          Delete
-                        </Button>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialogOverlay>
-                </AlertDialog>
-              </>
-            )}
-          </ModalFooter>
+                          <AlertDialogBody>Bạn có chắc muốn xóa task</AlertDialogBody>
+
+                          <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                              Cancel
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              onClick={() => {
+                                onClose();
+                                handleDeleteEvent();
+                              }}
+                              ml={3}
+                            >
+                              Delete
+                            </Button>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialogOverlay>
+                    </AlertDialog>
+                  </>
+                )}
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </ModalContent>
       </Modal>
     </div>
   );
 };
 
-export default CalendarHomePage;
+export default CalendarProject;

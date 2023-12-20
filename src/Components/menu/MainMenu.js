@@ -181,8 +181,8 @@ export default function Banner(props) {
               bg: "transparent",
             }}
             mb="10px"
-            // onClick={openCalendarModal}
-            as={Link} to="/admin/calendar"
+            onClick={openCalendarModal}
+            // as={Link} to="/admin/calendar"
           >
             <Flex align="center">
               <Icon as={MdEditCalendar} color="purple" h="16px" w="16px" me="8px" />
