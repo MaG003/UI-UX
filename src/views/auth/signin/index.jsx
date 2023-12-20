@@ -156,6 +156,16 @@ function Login() {
       setPassword("");
     };
   }
+
+  const handleCheckClick = () => {
+    // Get the current route location from the history object
+    const currentRoute = history.location.pathname;
+    console.log("Current Route:", currentRoute);
+
+    // Add more logic or actions here if needed
+  };
+
+
   return (
     <>
       <DefaultAuth illustrationBackground={illustration} image={illustration}>
@@ -315,7 +325,9 @@ function Login() {
               mt='0px'>
               <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
                 Not registered yet?
-                <NavLink to='/auth/sign-up'>
+                <NavLink to='/auth/sign-up'
+                  onClick={handleCheckClick}>
+
                   <Text
                     color={textColorBrand}
                     as='span'
