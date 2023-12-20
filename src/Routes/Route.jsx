@@ -8,6 +8,7 @@ import {
   MdCode
 } from "react-icons/md";
 import SignIn from '../views/auth/signin/index'
+import SignUp from '../views/auth/signup/index'
 import MyDashboard from '../views/admin/dashboard/index'
 import MyCalendar from "../views/admin/calendar/index"
 import CalendarProject from "../views/admin/calendarproject/index"
@@ -49,13 +50,18 @@ const routes = [
     icon: <Icon as={MdCode} width='20px' height='20px' color='inherit' />,
     component: MyProject,
   },
-  
+
   {
     name: "Sign Out",
     layout: "/auth",
     path: "/sign-in",
     icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
     component: SignIn,
+  },
+  {
+    layout: "/auth",
+    path: "/sign-up",
+    component: SignUp,
   },
 ];
 
