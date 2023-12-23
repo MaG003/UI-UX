@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/UI-UX/static/css/main.1357521d.css",
+    "main.js": "/UI-UX/static/js/main.fb79a72f.js",
+    "static/media/auth.png": "/UI-UX/static/media/auth.32bcea8496862bd05394.png",
+    "static/media/Navbar.png": "/UI-UX/static/media/Navbar.b1c65d8b8c17f7f948c6.png",
+    "index.html": "/UI-UX/index.html",
+    "main.1357521d.css.map": "/UI-UX/static/css/main.1357521d.css.map",
+    "main.fb79a72f.js.map": "/UI-UX/static/js/main.fb79a72f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1357521d.css",
+    "static/js/main.fb79a72f.js"
+  ]
+}
