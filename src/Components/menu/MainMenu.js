@@ -170,30 +170,6 @@ export default function Banner(props) {
 
           <MenuItem
             transition="0.2s linear"
-            color="purple"
-            _hover={textHover}
-            p="0px"
-            borderRadius="8px"
-            _active={{
-              bg: "transparent",
-            }}
-            _focus={{
-              bg: "transparent",
-            }}
-            mb="10px"
-            onClick={openCalendarModal}
-            // as={Link} to="/admin/calendar"
-          >
-            <Flex align="center">
-              <Icon as={MdEditCalendar} color="purple" h="16px" w="16px" me="8px" />
-              <Text fontSize="sm" fontWeight="400">
-                Calendar
-              </Text>
-            </Flex>
-          </MenuItem>
-
-          <MenuItem
-            transition="0.2s linear"
             p="0px"
             borderRadius="8px"
             color="green"
