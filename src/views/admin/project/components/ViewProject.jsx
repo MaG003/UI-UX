@@ -1,5 +1,8 @@
 /* eslint-disable */
 import {
+  FormControl,
+  FormLabel,
+  Input,
   Flex,
   Progress,
   Table,
@@ -30,7 +33,8 @@ import {
 } from "@chakra-ui/react";
 import { MdCheckCircle, MdSettings } from "react-icons/md";
 // Custom components
-import React, { useMemo, useEffect, useState  } from "react";
+import React, { useMemo, useEffect, useState } from "react";
+import { createTasks, getTasks, getWorkSpace, createWorkSpace } from "../../../../Redux/AppContext/actions";
 
 export default function ViewProject(props) {
   const { columnsData, tableData } = props;
@@ -39,123 +43,127 @@ export default function ViewProject(props) {
   const [modalOpened, setModalOpened] = useState(false);
   const textColor = useColorModeValue("secondaryGray.900", "white");
 
+  const [taskState, setTaskState] = useState({
+    name: "",
+    listtask: [],
+    member: [],
+    date: "",
+    progress: 0,
+  });
+
+
   useEffect(() => {
-    if (!modalOpened) {
-      onOpen();
-      setModalOpened(true);
-    }
+    const fetchData = async () => {
+      try {
+        if (!modalOpened) {
+          const data = await getWorkSpace();
+
+          // Kiểm tra nếu dữ liệu không rỗng và có cấu trúc mong đợi
+          if (data && Array.isArray(data) && data.length > 0) {
+            setTaskState({
+              name: data[0].name,
+              listtask: Array.isArray(data[0].listtask)
+                ? data[0].listtask
+                : [],
+              member: Array.isArray(data[0].member)
+                ? data[0].member
+                : [],
+              date: data[0].date,
+              progress: data[0].progress,
+            });
+
+            onOpen();
+            setModalOpened(true);
+          }
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu workspace:", error);
+      }
+    };
+
+
+    fetchData();
   }, [modalOpened, onOpen]);
-  
+
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-              <ModalHeader>Project Information</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Box>
-                  <Flex gap='20px'>
-                    <Heading size='xs' textTransform='uppercase'>
-                     NAME
-                   </Heading>
-                   <Heading size='xs' >
-                     UI/UX
-                   </Heading>
-                  </Flex>
-                </Box>
-               
-                <Box pt='2.5'>
-                  <Heading size='xs' textTransform='uppercase'>
-                    List Task
-                  </Heading>
-                  <List spacing={1} size='sm' fontSize='14px' padding='5px 0 0 0'>
-                      <ListItem>
-                        <ListIcon as={MdCheckCircle} color='green.500' />
-                         Thiết kế giao diện
-                      </ListItem>
-                      <ListItem>
-                        <ListIcon as={MdCheckCircle} color='green.500' />
-                         Vẽ biểu đồ tương tác
-                      </ListItem>
-                      <ListItem>
-                        <ListIcon as={MdCheckCircle} color='green.500' />
-                         Code giao diện
-                      </ListItem>
-                  </List>
-                </Box>
-                
-                <Box pt='2.5'>
-                  <Flex gap='140px'>
-                    <Box>
-                      <Heading size='xs' textTransform='uppercase'>
-                        LEADER
-                      </Heading>
-                      <Flex gap='5px' padding='5px 0 0 0'>
-                         <Avatar w='25px' h='25px' name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
-                      </Flex>
-                    </Box>
-                    <Box>
-                      <Heading size='xs' textTransform='uppercase'>
-                        MEMBER
-                      </Heading>
-                      <Flex gap='5px' marginTop='5px'>
-                         <Avatar w='25px' h='25px' name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
-                         <Avatar w='25px' h='25px' name='Dan Abrahmov' src='https://bit.ly/ryan-florence' />
-                         <Avatar w='25px' h='25px' name='Dan Abrahmov' src='https://bit.ly/kent-c-dodds' />
-                      </Flex>
-                    </Box>
-                  </Flex>
-                </Box>
-               
-                <Box pt='2.5'>
-                  <Flex gap='120px'>
-                    <Box>
-                       <Heading size='xs' textTransform='uppercase'>
-                         End Date
-                       </Heading>
-                       <Text fontSize='sm'>
-                          27/06/2023
-                       </Text>
-                       
-                    </Box>
-                     <Box>
-                       <Heading size='xs' textTransform='uppercase'>
-                         PROGRESS
-                       </Heading>
-                       <Flex align='center'>
-                             <Text
-                               me='10px'
-                               color={textColor}
-                               fontSize='sm'
-                               fontWeight='700'>
-                               {25}%
-                             </Text>
-                             <Progress
-                               variant='table'
-                               colorScheme='brandScheme'
-                               h='8px'
-                               w='63px'
-                               value={25.5}
-                             />
-                      </Flex>
-                    </Box>                      
-                  </Flex>
-                </Box>
-               
-                <Box paddingTop='10px'>
-                  <Heading size='xs' textTransform='uppercase'>
-                    priority
-                  </Heading>
-                  <Badge variant='solid' colorScheme='green'>High</Badge>
-                </Box>
-              </ModalBody>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>View WorkSpace</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
 
-              <ModalFooter>
-                <Button onClick={onClose}>Close</Button>
-              </ModalFooter>
-          </ModalContent>
-          </Modal>
+            {/* name  */}
+
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input
+                placeholder="Enter Name"
+                value={taskState.name}
+                onChange={(e) => setTaskState({ ...taskState, name: e.target.value })}
+              />
+            </FormControl>
+
+            <FormControl mt={5}>
+              <FormLabel>List Task</FormLabel>
+              <Input
+                placeholder="Enter List Task"
+                value={Array.isArray(taskState.listtask) ? taskState.listtask.join(', ') : taskState.listtask}
+                onChange={(e) => {
+                  console.log("Input Value:", e.target.value);
+                  const newList = e.target.value.split(',').map(item => item.trim());
+                  console.log("New List:", newList);
+                  setTaskState({
+                    type: 'listtask',
+                    payload: newList
+                  });
+                }}
+              />
+            </FormControl>
+
+
+
+            <FormControl mt={5}>
+              <FormLabel>Member</FormLabel>
+              <Input
+                placeholder="Nhập Gmail"
+                value={Array.isArray(taskState.member) ? taskState.member.join(', ') : taskState.member}
+                onChange={(e) => {
+                  const newMembers = e.target.value.split(',').map(item => item.trim());
+                  setTaskState(prevState => ({ ...prevState, member: newMembers }));
+                }}
+              />
+            </FormControl>
+
+            <FormControl mt={5}>
+              <FormLabel>End Date</FormLabel>
+              <Input
+                name="end-date"
+                type="date"
+                value={taskState.date}
+                onChange={(e) => setTaskState({ type: 'date', payload: e.target.value })}
+              />
+            </FormControl>
+
+            <FormControl mt={5}>
+              <FormLabel>Process</FormLabel>
+              <Input
+                placeholder="Enter Process"
+                value={taskState.progress}
+                onChange={(e) => setTaskState({ type: 'progress', payload: parseInt(e.target.value, 10) || 0 })}
+              />
+            </FormControl>
+
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+
+
+        </ModalContent>
+      </Modal>
     </>
   );
 }
