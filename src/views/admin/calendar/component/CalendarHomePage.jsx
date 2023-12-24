@@ -115,7 +115,7 @@ const CalendarHomePage = () => {
   };
 
   const handleAddEvent = (newEvent) => {
-    // console.log("handleAddEvent:", newEvent);
+    console.log("handleAddEvent:", newEvent);
     dispatch(addEvents(newEvent)).then(() => dispatch(getEvents()));
   };
 

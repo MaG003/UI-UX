@@ -23,7 +23,7 @@ import {
 import React, { useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useHistory } from "react-router-dom";
-import { createTasks, getTasks } from "../../../../Redux/AppContext/actions";
+import { createTasks, getTasks, addEvents, getEvents } from "../../../../Redux/AppContext/actions";
 
 const initialTaskState = {
     title: "",
@@ -110,6 +110,10 @@ const LpCreateTask = ({ isOpen, onClose }) => {
         setTaskState({ type: 'userID', payload: localStorage.getItem("userEmail") });
     }
 
+    const handleAddEvent = (newEvent) => {
+        // console.log("handleAddEvent:", newEvent);
+        dispatch(addEvents(newEvent)).then(() => dispatch(getEvents()));
+    };
 
     const createTaskHandler = () => {
         if (taskState.title !== "" &&
@@ -120,8 +124,18 @@ const LpCreateTask = ({ isOpen, onClose }) => {
             taskState.DateEnd !== "" &&
             taskState.TimeEnd !== "") {
 
-            console.log("taskState:", taskState);
+            const newEvent = {
+                title: taskState.title,
+                start: new Date(taskState.DateStart),
+                end: new Date(taskState.DateEnd),
+                start_time: taskState.TimeStart,
+                end_time: taskState.TimeEnd,
+                description: "",
+                userID: localStorage.getItem("userEmail"),
+            };
+            handleAddEvent(newEvent);
 
+            console.log("taskState:", taskState);
             dispatch(createTasks(taskState))
                 .then(() => dispatch(getTasks()))
                 .then(() => toast({
