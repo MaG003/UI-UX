@@ -4,6 +4,7 @@ const initialState = {
   tasks: [],
   tags: [],
   events: [],
+  workSpace: [],
   checkPoint: [],
   isLoading: false,
   isError: false,
@@ -26,6 +27,28 @@ const reducer = (state = initialState, action) => {
         isError: false,
       };
     case types.GET_TASKS_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+
+    case types.GET_WORKSPACE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+
+    case types.GET_WORKSPACE_SUCCESS:
+      return {
+        ...state,
+        workSpace: payload,
+        isLoading: false,
+        isError: false,
+      };
+
+    case types.GET_WORKSPACE_FAILURE:
       return {
         ...state,
         isLoading: false,
@@ -76,6 +99,8 @@ const reducer = (state = initialState, action) => {
       return { ...state };
     default:
       return state;
+
+
   }
 };
 

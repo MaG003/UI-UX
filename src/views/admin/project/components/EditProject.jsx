@@ -29,48 +29,52 @@ import {
 import { React, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useHistory } from "react-router-dom";
-import { createTasks, getTasks } from "../../../../Redux/AppContext/actions";
+import { createTasks, getTasks, getWorkSpace } from "../../../../Redux/AppContext/actions";
 
 const initialTaskState = {
-    title: "",
-    description: "",
-    task_status: "High",
-    tags: ["Private"],
-    Date: "2023-03-13",
-    userID: "",
-    isValidate: false,
+    name: "",
+    list_task: "",
+    add_member: "",
+    end_date: "",
+    priority: "High",
+    status: "Private",
 };
 
 const taskReducer = (state, action) => {
     switch (action.type) {
-        case 'title':
+        case 'name':
             return {
                 ...state,
-                title: action.payload,
+                name: action.payload,
             };
 
-        case 'description':
+        case 'list_task':
             return {
                 ...state,
-                description: action.payload,
+                list_task: action.payload,
             };
 
-        case 'task_status':
+        case 'add_member':
             return {
                 ...state,
-                task_status: action.payload,
+                add_member: action.payload,
             };
 
-        case 'tags':
+        case 'end_date':
             return {
                 ...state,
-                tags: action.payload,
+                end_date: action.payload,
             };
 
-        case 'Date':
+        case 'priority':
             return {
                 ...state,
-                Date: action.payload,
+                priority: action.payload,
+            };
+        case 'status':
+            return {
+                ...state,
+                status: action.payload,
             };
         case 'userID':
             return {
@@ -94,6 +98,22 @@ const EditProject = ({ isOpen, onClose }) => {
     if (taskState.userID === "") {
         setTaskState({ type: 'userID', payload: localStorage.getItem("userEmail") });
     }
+    // const updateFunc = () => {
+
+    //     dispatch(
+    //         updateTasks(id, {
+    //             title: taskTitle,
+    //             description: taskDescription,
+    //             DateStart: taskDateStart,
+    //             DateEnd: taskDateEnd,
+    //             TimeStart: taskTimeStart,
+    //             TimeEnd: taskTimeEnd,
+    //             tags: taskTags,
+    //             task_status: taskStatus,
+    //         })
+    //     ).then(() => dispatch(getTasks()));
+
+    // }
 
 
     const createTaskHandler = () => {
@@ -146,7 +166,7 @@ const EditProject = ({ isOpen, onClose }) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Edit Project</ModalHeader>
+                <ModalHeader>Edit WorkSpace</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
 
@@ -226,6 +246,15 @@ const EditProject = ({ isOpen, onClose }) => {
                             <option value="Low">Low</option>
                         </Select>
                     </Box>
+
+                    <FormControl mt={5}>
+                        <FormLabel>Process</FormLabel>
+                        <Input
+                            placeholder="Enter Process"
+                            value={taskState.progress}
+                            onChange={(e) => setTaskState({ type: 'progress', payload: e.target.value })}
+                        />
+                    </FormControl>
 
                     {/* Tags  */}
 
