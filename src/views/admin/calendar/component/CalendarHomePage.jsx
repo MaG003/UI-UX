@@ -11,6 +11,9 @@ import {
   getCheckPoint,
   getEvents,
   updateEvent,
+  createTasks,
+  getTasks,
+  deleteTasks,
 } from "../../../../Redux/AppContext/actions";
 import {
   Button,
@@ -61,7 +64,7 @@ const CalendarHomePage = () => {
 
   const [title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
-  const [TaskStatus, setTaskStatus] = useState("");
+  const [TaskStatus, setTaskStatus] = useState("todo");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -116,6 +119,14 @@ const CalendarHomePage = () => {
     dispatch(addEvents(newEvent)).then(() => dispatch(getEvents()));
   };
 
+  const handleCreatetask = (taskState) => {
+    dispatch(createTasks(taskState)).then(() => dispatch(getEvents()));
+  }
+
+  const handleDeleteTask = (id) => {
+    dispatch(deleteTasks(id)).then(() => dispatch(getTasks()));
+  }
+
   const handleUpdateEvent = (id, updateEventobj) => {
     console.log(id, updateEventobj);
     if (updateEventobj.title !== "" &&
@@ -140,6 +151,7 @@ const CalendarHomePage = () => {
 
   const handleDeletingEvent = (id) => {
     dispatch(deleteEvent(id)).then(() => dispatch(getEvents()));
+    dispatch(deleteTasks(id)).then(() => dispatch(getTasks()));
   };
 
   const onEventResize = (data) => {
@@ -225,6 +237,19 @@ const CalendarHomePage = () => {
           userID: localStorage.getItem("userEmail"),
         };
         handleAddEvent(newEvent);
+
+        const taskState = {
+          title: title,
+          description: Description,
+          // task_status: TaskStatus,
+          task_status: "todo",
+          DateStart: startDate,
+          TimeStart: startTime,
+          DateEnd: endDate,
+          TimeEnd: endTime,
+          userID: localStorage.getItem("userEmail"),
+        };
+        handleCreatetask(taskState);
       }
       else {
         toast({
@@ -254,7 +279,7 @@ const CalendarHomePage = () => {
   // const handleRedirect = () => {
   //   history.push('/admin/list-task');
   // };
-  
+
   const generateJsonData = () => {
     const jsonData = {
       title: title,
@@ -265,7 +290,7 @@ const CalendarHomePage = () => {
       DateEnd: endDate,
       TimeEnd: endTime
     };
-  
+
     return jsonData;
   };
 

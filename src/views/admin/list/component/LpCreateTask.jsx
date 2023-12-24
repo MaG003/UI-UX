@@ -120,7 +120,7 @@ const LpCreateTask = ({ isOpen, onClose }) => {
             taskState.DateEnd !== "" &&
             taskState.TimeEnd !== "") {
 
-            console.log(taskState);
+            console.log("taskState:", taskState);
 
             dispatch(createTasks(taskState))
                 .then(() => dispatch(getTasks()))
