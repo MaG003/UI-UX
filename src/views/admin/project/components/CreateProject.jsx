@@ -28,12 +28,12 @@ import { createTasks, getTasks, getWorkSpace, createWorkSpace } from "../../../.
 
 const initialTaskState = {
     name: "",
-    list_task: "",
-    add_member: "",
-    end_date: "",
-    priority: "High",
+    listtask: [],
+    member: [],
+    date: "",
+    // priority: "High",
     progress: 0,
-    status: "Private",
+    // status: "Private",
 };
 
 const taskReducer = (state, action) => {
@@ -44,28 +44,28 @@ const taskReducer = (state, action) => {
                 name: action.payload,
             };
 
-        case 'list_task':
+        case 'listtask':
             return {
                 ...state,
-                list_task: action.payload,
+                listtask: action.payload,
             };
 
-        case 'add_member':
+        case 'member':
             return {
                 ...state,
-                add_member: action.payload,
+                member: action.payload,
             };
 
-        case 'end_date':
+        case 'date':
             return {
                 ...state,
-                end_date: action.payload,
+                date: action.payload,
             };
-        case 'priority':
-            return {
-                ...state,
-                priority: action.payload,
-            };
+        // case 'priority':
+        //     return {
+        //         ...state,
+        //         priority: action.payload,
+        //     };
 
         case 'progress':
             return {
@@ -73,11 +73,11 @@ const taskReducer = (state, action) => {
                 progress: action.payload,
             };
 
-        case 'status':
-            return {
-                ...state,
-                status: action.payload,
-            };
+        // case 'status':
+        //     return {
+        //         ...state,
+        //         status: action.payload,
+        //     };
 
         default:
             return state;
@@ -100,11 +100,11 @@ const CreateProject = ({ isOpen, onClose }) => {
 
     const createTaskHandler = () => {
         if (taskState.name !== "" &&
-            taskState.list_task !== "" &&
-            taskState.add_member !== "" &&
-            taskState.end_date !== "" &&
-            taskState.priority !== "" &&
-            taskState.status !== "",
+            taskState.listtask.length !== 0 &&
+            taskState.member.length !== 0 &&
+            taskState.date !== "" &&
+            // taskState.priority !== "" &&
+            // taskState.status !== "",
             taskState.progress !== 0) {
 
             console.log(taskState);
@@ -167,17 +167,22 @@ const CreateProject = ({ isOpen, onClose }) => {
                         <FormLabel>List Task</FormLabel>
                         <Input
                             placeholder="Enter List Task"
-                            value={taskState.list_task}
-                            onChange={(e) => setTaskState({ type: 'list_task', payload: e.target.value })}
-                        />
+                            value={taskState.listtask.join(', ')}
+                            onChange={(e) => setTaskState({
+                                type: 'listtask',
+                                payload: e.target.value.split(',').map(item => item.trim())
+                            })} />
                     </FormControl>
 
                     <FormControl mt={5}>
                         <FormLabel>Add Member</FormLabel>
                         <Input
                             placeholder="Enter Gmail"
-                            value={taskState.add_member}
-                            onChange={(e) => setTaskState({ type: 'add_member', payload: e.target.value })}
+                            value={taskState.member.join(', ')}
+                            onChange={(e) => setTaskState({
+                                type: 'member',
+                                payload: e.target.value.split(',').map(item => item.trim()) // Convert input string to array
+                            })}
                         />
                     </FormControl>
 
@@ -186,8 +191,8 @@ const CreateProject = ({ isOpen, onClose }) => {
                         <Input
                             name="end-date"
                             type="date"
-                            value={taskState.end_date}
-                            onChange={(e) => setTaskState({ type: 'end_date', payload: e.target.value })}
+                            value={taskState.date}
+                            onChange={(e) => setTaskState({ type: 'date', payload: e.target.value })}
                         />
                     </FormControl>
 
@@ -196,13 +201,13 @@ const CreateProject = ({ isOpen, onClose }) => {
                         <Input
                             placeholder="Enter Process"
                             value={taskState.progress}
-                            onChange={(e) => setTaskState({ type: 'progress', payload: e.target.value })}
+                            onChange={(e) => setTaskState({ type: 'progress', payload: parseInt(e.target.value, 10) || 0 })}
                         />
                     </FormControl>
 
                     {/* PRIORITY */}
 
-                    <Box mb="0.5rem" mt={5}>
+                    {/* <Box mb="0.5rem" mt={5}>
                         <FormLabel>Priority</FormLabel>
                         <Select
                             placeholder="Select Priority"
@@ -213,11 +218,11 @@ const CreateProject = ({ isOpen, onClose }) => {
                             <option value="progress">Medium</option>
                             <option value="done">Low</option>
                         </Select>
-                    </Box>
+                    </Box> */}
 
                     {/* Tags  */}
 
-                    <Box mb="0.5rem" mt={5}>
+                    {/* <Box mb="0.5rem" mt={5}>
                         <FormLabel>Status</FormLabel>
                         <Select
                             placeholder="Select Status"
@@ -228,7 +233,7 @@ const CreateProject = ({ isOpen, onClose }) => {
                             <option value="doing">Public</option>
 
                         </Select>
-                    </Box>
+                    </Box> */}
 
                 </ModalBody>
 

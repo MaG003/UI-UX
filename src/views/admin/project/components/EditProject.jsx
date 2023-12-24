@@ -31,13 +31,69 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useHistory } from "react-router-dom";
 import { createTasks, getTasks, getWorkSpace } from "../../../../Redux/AppContext/actions";
 
+// const initialTaskState = {
+//     name: "",
+//     list_task: "",
+//     add_member: "",
+//     end_date: "",
+//     priority: "High",
+//     status: "Private",
+// };
+
+// const taskReducer = (state, action) => {
+//     switch (action.type) {
+//         case 'name':
+//             return {
+//                 ...state,
+//                 name: action.payload,
+//             };
+
+//         case 'list_task':
+//             return {
+//                 ...state,
+//                 list_task: action.payload,
+//             };
+
+//         case 'add_member':
+//             return {
+//                 ...state,
+//                 add_member: action.payload,
+//             };
+
+//         case 'end_date':
+//             return {
+//                 ...state,
+//                 end_date: action.payload,
+//             };
+
+//         case 'priority':
+//             return {
+//                 ...state,
+//                 priority: action.payload,
+//             };
+//         case 'status':
+//             return {
+//                 ...state,
+//                 status: action.payload,
+//             };
+//         case 'userID':
+//             return {
+//                 ...state,
+//                 userID: action.payload,
+//             };
+//         default:
+//             return state;
+//     };
+// };
+
 const initialTaskState = {
     name: "",
-    list_task: "",
-    add_member: "",
-    end_date: "",
-    priority: "High",
-    status: "Private",
+    listtask: [],
+    member: [],
+    date: "",
+    // priority: "High",
+    progress: 0,
+    // status: "Private",
 };
 
 const taskReducer = (state, action) => {
@@ -48,49 +104,52 @@ const taskReducer = (state, action) => {
                 name: action.payload,
             };
 
-        case 'list_task':
+        case 'listtask':
             return {
                 ...state,
-                list_task: action.payload,
+                listtask: action.payload,
             };
 
-        case 'add_member':
+        case 'member':
             return {
                 ...state,
-                add_member: action.payload,
+                member: action.payload,
             };
 
-        case 'end_date':
+        case 'date':
             return {
                 ...state,
-                end_date: action.payload,
+                date: action.payload,
+            };
+        // case 'priority':
+        //     return {
+        //         ...state,
+        //         priority: action.payload,
+        //     };
+
+        case 'progress':
+            return {
+                ...state,
+                progress: action.payload,
             };
 
-        case 'priority':
-            return {
-                ...state,
-                priority: action.payload,
-            };
-        case 'status':
-            return {
-                ...state,
-                status: action.payload,
-            };
-        case 'userID':
-            return {
-                ...state,
-                userID: action.payload,
-            };
+        // case 'status':
+        //     return {
+        //         ...state,
+        //         status: action.payload,
+        //     };
+
         default:
             return state;
     };
 };
 
+
 const EditProject = ({ isOpen, onClose }) => {
 
     const [taskState, setTaskState] = useReducer(taskReducer, initialTaskState);
-    const tagList = useSelector((state) => state.AppReducer.tags);
-    const tasks = useSelector((store) => store.AppReducer.tasks);
+    // const tagList = useSelector((state) => state.AppReducer.tags);
+    // const tasks = useSelector((store) => store.AppReducer.tasks);
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useHistory();
@@ -186,40 +245,26 @@ const EditProject = ({ isOpen, onClose }) => {
 
                     <FormControl mt={5}>
                         <FormLabel>List Task</FormLabel>
-
-                        <Stack direction="column" spacing={2}>
-                            <Checkbox
-                                isChecked={taskState.design}
-                                onChange={() => setTaskState({ type: 'design', payload: !taskState.design })}
-                            >
-                                Thiết kế giao diện
-                            </Checkbox>
-
-                            <Checkbox
-                                isChecked={taskState.interactiveChart}
-                                onChange={() => setTaskState({ type: 'interactiveChart', payload: !taskState.interactiveChart })}
-                            >
-                                Vẽ biểu đồ tương tác
-                            </Checkbox>
-
-                            <Checkbox
-                                isChecked={taskState.codeDesign}
-                                onChange={() => setTaskState({ type: 'codeDesign', payload: !taskState.codeDesign })}
-                            >
-                                Code giao diện
-                            </Checkbox>
-                        </Stack>
+                        <Input
+                            placeholder="Enter List Task"
+                            value={taskState.listtask.join(', ')}
+                            onChange={(e) => setTaskState({
+                                type: 'listtask',
+                                payload: e.target.value.split(',').map(item => item.trim())
+                            })} />
                     </FormControl>
+
 
                     <FormControl mt={5}>
                         <FormLabel>Add Member</FormLabel>
-                        <Editable
-                            defaultValue="leminhvu123@gmail.com, vietdz123@gmail.com"
-                            onChange={(value) => setTaskState({ type: 'title', payload: value })}
-                        >
-                            <EditablePreview />
-                            <EditableInput />
-                        </Editable>
+                        <Input
+                            placeholder="Enter Gmail"
+                            value={taskState.member.join(', ')}
+                            onChange={(e) => setTaskState({
+                                type: 'member',
+                                payload: e.target.value.split(',').map(item => item.trim()) // Convert input string to array
+                            })}
+                        />
                     </FormControl>
 
                     <FormControl mt={5}>
@@ -234,7 +279,7 @@ const EditProject = ({ isOpen, onClose }) => {
 
                     {/* PRIORITY */}
 
-                    <Box mb="0.5rem" mt={5}>
+                    {/* <Box mb="0.5rem" mt={5}>
                         <FormLabel>Priority</FormLabel>
                         <Select
                             placeholder="Select Priority"
@@ -245,7 +290,7 @@ const EditProject = ({ isOpen, onClose }) => {
                             <option value="Medium">Medium</option>
                             <option value="Low">Low</option>
                         </Select>
-                    </Box>
+                    </Box> */}
 
                     <FormControl mt={5}>
                         <FormLabel>Process</FormLabel>
@@ -257,7 +302,7 @@ const EditProject = ({ isOpen, onClose }) => {
                     </FormControl>
 
                     {/* Tags  */}
-
+                    {/* 
                     <Box mb="0.5rem" mt={5}>
                         <FormLabel>Status</FormLabel>
                         <Select
@@ -268,7 +313,7 @@ const EditProject = ({ isOpen, onClose }) => {
                             <option value="Public">Public</option>
                             <option value="Private">Private</option>
                         </Select>
-                    </Box>
+                    </Box> */}
 
                 </ModalBody>
 
