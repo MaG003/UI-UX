@@ -28,6 +28,30 @@ const createWorkSpace = (payload) => (dispatch) => {
     });
 }
 
+const updateWorkSpace = (id, payload) => (dispatch) => {
+  dispatch({ type: types.UPDATE_WORKSPACE_REQUEST });
+  return axios
+    .put(`https://6586fd43468ef171392f1856.mockapi.io/workspace/${id}`, payload)
+    .then((r) => {
+      dispatch({ type: types.UPDATE_WORKSPACE_SUCCESS, payload: r.data });
+    })
+    .catch((e) => {
+      dispatch({ type: types.UPDATE_WORKSPACE_FAILURE, payload: e });
+    });
+};
+
+const deleteWorkSpace = (id) => (dispatch) => {
+  dispatch({ type: types.DELETE_WORKSPACE_REQUEST });
+  return axios
+    .delete(`https://6586fd43468ef171392f1856.mockapi.io/workspace/${id}`)
+    .then((res) => {
+      dispatch({ type: types.DELETE_WORKSPACE_SUCCESS, payload: res });
+    })
+    .catch((e) => {
+      dispatch({ type: types.DELETE_WORKSPACE_FAILURE, payload: e });
+    });
+};
+
 const getTasks = () => (dispatch) => {
   dispatch({ type: types.GET_TASKS_REQUEST });
   return axios
@@ -204,6 +228,8 @@ const updateCheckPoints = (id, payload) => (dispatch) => {
 export {
   getWorkSpace,
   createWorkSpace,
+  updateWorkSpace,
+  deleteWorkSpace,
   getTasks,
   getTagsList,
   updateSubtasksList,

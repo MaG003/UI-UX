@@ -29,71 +29,14 @@ import {
 import { React, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useHistory } from "react-router-dom";
-import { createTasks, getTasks, getWorkSpace } from "../../../../Redux/AppContext/actions";
-
-// const initialTaskState = {
-//     name: "",
-//     list_task: "",
-//     add_member: "",
-//     end_date: "",
-//     priority: "High",
-//     status: "Private",
-// };
-
-// const taskReducer = (state, action) => {
-//     switch (action.type) {
-//         case 'name':
-//             return {
-//                 ...state,
-//                 name: action.payload,
-//             };
-
-//         case 'list_task':
-//             return {
-//                 ...state,
-//                 list_task: action.payload,
-//             };
-
-//         case 'add_member':
-//             return {
-//                 ...state,
-//                 add_member: action.payload,
-//             };
-
-//         case 'end_date':
-//             return {
-//                 ...state,
-//                 end_date: action.payload,
-//             };
-
-//         case 'priority':
-//             return {
-//                 ...state,
-//                 priority: action.payload,
-//             };
-//         case 'status':
-//             return {
-//                 ...state,
-//                 status: action.payload,
-//             };
-//         case 'userID':
-//             return {
-//                 ...state,
-//                 userID: action.payload,
-//             };
-//         default:
-//             return state;
-//     };
-// };
+import { createTasks, getTasks, getWorkSpace, updateWorkSpace } from "../../../../Redux/AppContext/actions";
 
 const initialTaskState = {
     name: "",
     listtask: [],
     member: [],
     date: "",
-    // priority: "High",
     progress: 0,
-    // status: "Private",
 };
 
 const taskReducer = (state, action) => {
@@ -121,11 +64,6 @@ const taskReducer = (state, action) => {
                 ...state,
                 date: action.payload,
             };
-        // case 'priority':
-        //     return {
-        //         ...state,
-        //         priority: action.payload,
-        //     };
 
         case 'progress':
             return {
@@ -133,19 +71,13 @@ const taskReducer = (state, action) => {
                 progress: action.payload,
             };
 
-        // case 'status':
-        //     return {
-        //         ...state,
-        //         status: action.payload,
-        //     };
-
         default:
             return state;
     };
 };
 
 
-const EditProject = ({ isOpen, onClose }) => {
+const EditProject = (id, { isOpen, onClose }) => {
 
     const [taskState, setTaskState] = useReducer(taskReducer, initialTaskState);
     // const tagList = useSelector((state) => state.AppReducer.tags);
@@ -157,67 +89,69 @@ const EditProject = ({ isOpen, onClose }) => {
     if (taskState.userID === "") {
         setTaskState({ type: 'userID', payload: localStorage.getItem("userEmail") });
     }
-    // const updateFunc = () => {
+    const updateFunc = () => {
+        dispatch(
+            updateWorkSpace(id, {
+                name: taskState.name,
+                listtask: taskState.listtask,
+                member: taskState.member,
+                date: taskState.date,
+                progress: taskState.progress,
 
-    //     dispatch(
-    //         updateTasks(id, {
-    //             title: taskTitle,
-    //             description: taskDescription,
-    //             DateStart: taskDateStart,
-    //             DateEnd: taskDateEnd,
-    //             TimeStart: taskTimeStart,
-    //             TimeEnd: taskTimeEnd,
-    //             tags: taskTags,
-    //             task_status: taskStatus,
-    //         })
-    //     ).then(() => dispatch(getTasks()));
-
-    // }
-
-
-    const createTaskHandler = () => {
-        if (taskState.title !== "" &&
-            taskState.description !== "" &&
-            taskState.task_status !== "" &&
-            taskState.tags !== "" &&
-            taskState.Date !== "") {
-
-            console.log(taskState);
-
-            dispatch(createTasks(taskState))
-                .then(() => dispatch(getTasks()))
-                .then(() => toast({
-                    title: 'Task Created.',
-                    description: "We've created your task for you.",
-                    status: 'success',
-                    duration: 2000,
-                    position: "top",
-                    isClosable: true,
-                }))
-                .then(() => {
-                    if (location.pathname !== "//#/admin/list-task") {
-                        navigate.push("/admin/list-task");
-                        onClose()
-                    }
-                    else {
-                        navigate.push("/admin/list-task");
-                        onClose()
-                    };
-                    // onClose()
-                });
-        }
-        else {
-            toast({
-                title: 'All fields are not there!.',
-                description: "Please enter all the fileds.",
-                status: 'warning',
-                duration: 2000,
-                position: "top",
-                isClosable: true,
             })
-        }
-        dispatch(getTasks())
-    };
+        ).then(() => toast({
+            title: 'WorkSpace updated !',
+            description: "We've updated your workspace.",
+            status: 'success',
+            duration: 1500,
+            position: "top",
+            isClosable: true,
+        })).then(() => dispatch(getWorkSpace()));
+    }
+
+    // const createTaskHandler = () => {
+    //     if (taskState.title !== "" &&
+    //         taskState.description !== "" &&
+    //         taskState.task_status !== "" &&
+    //         taskState.tags !== "" &&
+    //         taskState.Date !== "") {
+
+    //         console.log(taskState);
+
+    //         dispatch(createTasks(taskState))
+    //             .then(() => dispatch(getTasks()))
+    //             .then(() => toast({
+    //                 title: 'Task Created.',
+    //                 description: "We've created your task for you.",
+    //                 status: 'success',
+    //                 duration: 2000,
+    //                 position: "top",
+    //                 isClosable: true,
+    //             }))
+    //             .then(() => {
+    //                 if (location.pathname !== "//#/admin/list-task") {
+    //                     navigate.push("/admin/list-task");
+    //                     onClose()
+    //                 }
+    //                 else {
+    //                     navigate.push("/admin/list-task");
+    //                     onClose()
+    //                 };
+    //                 // onClose()
+    //             });
+    //     }
+    //     else {
+    //         toast({
+    //             title: 'All fields are not there!.',
+    //             description: "Please enter all the fileds.",
+    //             status: 'warning',
+    //             duration: 2000,
+    //             position: "top",
+    //             isClosable: true,
+    //         })
+    //     }
+    //     dispatch(getTasks())
+    // };
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -318,7 +252,7 @@ const EditProject = ({ isOpen, onClose }) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' onClick={createTaskHandler}>Save</Button>
+                    <Button colorScheme='blue' onClick={updateFunc}>Save</Button>
                 </ModalFooter>
 
             </ModalContent>
