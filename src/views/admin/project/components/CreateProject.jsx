@@ -23,55 +23,62 @@ import {
 } from "@chakra-ui/react";
 import React, { useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate,useHistory } from "react-router-dom";
-import { createTasks, getTasks } from "../../../../Redux/AppContext/actions";
+import { useLocation, useNavigate, useHistory } from "react-router-dom";
+import { createTasks, getTasks, getWorkSpace, createWorkSpace } from "../../../../Redux/AppContext/actions";
 
 const initialTaskState = {
-    title: "",
-    description: "",
-    task_status: "todo",
-    tags: ["Teams"],
-    Date: "",
-    userID: "",
-    isValidate: false,
+    name: "",
+    list_task: "",
+    add_member: "",
+    end_date: "",
+    priority: "High",
+    progress: 0,
+    status: "Private",
 };
 
 const taskReducer = (state, action) => {
     switch (action.type) {
-        case 'title':
+        case 'name':
             return {
                 ...state,
-                title: action.payload,
+                name: action.payload,
             };
 
-        case 'description':
+        case 'list_task':
             return {
                 ...state,
-                description: action.payload,
+                list_task: action.payload,
             };
 
-        case 'task_status':
+        case 'add_member':
             return {
                 ...state,
-                task_status: action.payload,
+                add_member: action.payload,
             };
 
-        case 'tags':
+        case 'end_date':
             return {
                 ...state,
-                tags: action.payload,
+                end_date: action.payload,
+            };
+        case 'priority':
+            return {
+                ...state,
+                priority: action.payload,
             };
 
-        case 'Date':
+        case 'progress':
             return {
                 ...state,
-                Date: action.payload,
+                progress: action.payload,
             };
-        case 'userID':
+
+        case 'status':
             return {
                 ...state,
-                userID: action.payload,
+                status: action.payload,
             };
+
         default:
             return state;
     };
@@ -86,99 +93,110 @@ const CreateProject = ({ isOpen, onClose }) => {
     const location = useLocation();
     const navigate = useHistory();
     const toast = useToast();
-    if(taskState.userID === ""){
+    if (taskState.userID === "") {
         setTaskState({ type: 'userID', payload: localStorage.getItem("userEmail") });
     }
 
 
     const createTaskHandler = () => {
-        if(taskState.title !== "" && 
-        taskState.description !=="" && 
-        taskState.task_status !== "" && 
-        taskState.tags !== "" && 
-        taskState.Date !== ""){
+        if (taskState.name !== "" &&
+            taskState.list_task !== "" &&
+            taskState.add_member !== "" &&
+            taskState.end_date !== "" &&
+            taskState.priority !== "" &&
+            taskState.status !== "",
+            taskState.progress !== 0) {
 
             console.log(taskState);
 
-            dispatch(createTasks(taskState))
-            .then(() => dispatch(getTasks()))
-            .then(() => toast({
-                title: 'Task Created.',
-                description: "We've created your task for you.",
-                status: 'success',
-                duration: 2000,
-                position: "top",
-                isClosable: true,
-              }))
-            .then(() => {
-                if(location.pathname !== "//#/admin/list-task"){
-                    navigate.push("/admin/list-task");
-                    onClose()
-                }
-                else{
-                    navigate.push("/admin/list-task");
-                    onClose()
-                };
-                // onClose()
-            });
+            dispatch(createWorkSpace(taskState))
+                .then(() => dispatch(getWorkSpace()))
+                .then(() => toast({
+                    name: 'WorkSpace Created.',
+                    description: "We've created your workspace for you.",
+                    status: 'success',
+                    duration: 2000,
+                    position: "top",
+                    isClosable: true,
+                }))
+                .then(() => {
+                    if (location.pathname !== "//#/admin/project") {
+                        navigate.push("/admin/project");
+                        onClose()
+                    }
+                    else {
+                        navigate.push("/admin/list-project");
+                        onClose()
+                    };
+                    // onClose()
+                });
         }
-        else{
+        else {
             toast({
-                title: 'All fields are not there!.',
+                name: 'All fields are not there!.',
                 description: "Please enter all the fileds.",
                 status: 'warning',
                 duration: 2000,
                 position: "top",
                 isClosable: true,
-              })
+            })
         }
-        dispatch(getTasks())
+        dispatch(getWorkSpace())
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Create Project</ModalHeader>
+                <ModalHeader>Create WorkSpace</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
 
-                    {/* title  */}
+                    {/* name  */}
 
                     <FormControl>
                         <FormLabel>Name</FormLabel>
                         <Input
                             placeholder="Enter Name"
-                            value={taskState.title}
-                            onChange={(e) => setTaskState({ type: 'title', payload: e.target.value })}
+                            value={taskState.name}
+                            onChange={(e) => setTaskState({ type: 'name', payload: e.target.value })}
                         />
                     </FormControl>
 
                     <FormControl mt={5}>
                         <FormLabel>List Task</FormLabel>
-                            <Input
-                                placeholder="Enter List Task"
-                                value={taskState.description}
-                                onChange={(e) => setTaskState({ type: 'description', payload: e.target.value })}
-                            />
+                        <Input
+                            placeholder="Enter List Task"
+                            value={taskState.list_task}
+                            onChange={(e) => setTaskState({ type: 'list_task', payload: e.target.value })}
+                        />
                     </FormControl>
 
                     <FormControl mt={5}>
                         <FormLabel>Add Member</FormLabel>
-                            <Input
-                                placeholder="Enter Gmail"
-                                value={taskState.description1}
-                                onChange={(e) => setTaskState({ type: 'description1', payload: e.target.value })}
-                            />
+                        <Input
+                            placeholder="Enter Gmail"
+                            value={taskState.add_member}
+                            onChange={(e) => setTaskState({ type: 'add_member', payload: e.target.value })}
+                        />
                     </FormControl>
-                    
+
                     <FormControl mt={5}>
-                       <FormLabel>End Date</FormLabel>
-                       <Input
-                         name="start-date"
-                         type="date"
-                         value={taskState.Date}
-                         onChange={(e) => setTaskState({ type: 'Date', payload: e.target.value })}
+                        <FormLabel>End Date</FormLabel>
+                        <Input
+                            name="end-date"
+                            type="date"
+                            value={taskState.end_date}
+                            onChange={(e) => setTaskState({ type: 'end_date', payload: e.target.value })}
+                        />
+                    </FormControl>
+
+                    <FormControl mt={5}>
+                        <FormLabel>Process</FormLabel>
+                        <Input
+                            placeholder="Enter Process"
+                            value={taskState.progress}
+                            onChange={(e) => setTaskState({ type: 'progress', payload: e.target.value })}
                         />
                     </FormControl>
 
@@ -188,8 +206,8 @@ const CreateProject = ({ isOpen, onClose }) => {
                         <FormLabel>Priority</FormLabel>
                         <Select
                             placeholder="Select Priority"
-                            value={taskState.task_status}
-                            onChange={(e) => setTaskState({ type: 'task_status', payload: e.target.value })}
+                            value={taskState.priority}
+                            onChange={(e) => setTaskState({ type: 'priority', payload: e.target.value })}
                         >
                             <option value="todo">High</option>
                             <option value="progress">Medium</option>
@@ -203,20 +221,19 @@ const CreateProject = ({ isOpen, onClose }) => {
                         <FormLabel>Status</FormLabel>
                         <Select
                             placeholder="Select Status"
-                            value={taskState.tags}
-                            onChange={(e) => setTaskState({ type: 'tags', payload: e.target.value })}
+                            value={taskState.status}
+                            onChange={(e) => setTaskState({ type: 'status', payload: e.target.value })}
                         >
-                            <option value="todo">To Do</option>
-                            <option value="doing">Doing</option>
-                            <option value="done">Done</option>
-                            <option value="overdue">Overdue</option>
+                            <option value="todo">Private</option>
+                            <option value="doing">Public</option>
+
                         </Select>
                     </Box>
 
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue'onClick={createTaskHandler}>Create</Button>
+                    <Button colorScheme='blue' onClick={createTaskHandler}>Create</Button>
                 </ModalFooter>
 
             </ModalContent>

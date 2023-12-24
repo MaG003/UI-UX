@@ -2,6 +2,32 @@
 import * as types from "./actionTypes";
 import axios from "axios";
 
+
+const getWorkSpace = () => (dispatch) => {
+  dispatch({ type: types.GET_TASKS_REQUEST });
+  return axios
+    .get(`https://6586fd43468ef171392f1856.mockapi.io/workspace`)
+    .then((res) => {
+      dispatch({ type: types.GET_WORKSPACE_SUCCESS, payload: res.data });
+    })
+    .catch((e) => {
+      dispatch({ type: types.GET_WORKSPACE_FAILURE, payload: e });
+    });
+};
+
+const createWorkSpace = (payload) => (dispatch) => {
+  dispatch({ type: types.CREATE_WORKSPACE_REQUEST });
+  return axios
+    .post(`https://6586fd43468ef171392f1856.mockapi.io/workspace`, payload)
+    .then((res) => {
+      console.log(res);
+      dispatch({ type: types.CREATE_WORKSPACE_SUCCESS, payload: res.data });
+    })
+    .catch((e) => {
+      dispatch({ type: types.CREATE_WORKSPACE_FAILURE, payload: e });
+    });
+}
+
 const getTasks = () => (dispatch) => {
   dispatch({ type: types.GET_TASKS_REQUEST });
   return axios
@@ -176,6 +202,8 @@ const updateCheckPoints = (id, payload) => (dispatch) => {
 };
 
 export {
+  getWorkSpace,
+  createWorkSpace,
   getTasks,
   getTagsList,
   updateSubtasksList,
