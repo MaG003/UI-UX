@@ -124,17 +124,6 @@ const LpCreateTask = ({ isOpen, onClose }) => {
             taskState.DateEnd !== "" &&
             taskState.TimeEnd !== "") {
 
-            const newEvent = {
-                title: taskState.title,
-                start: new Date(taskState.DateStart),
-                end: new Date(taskState.DateEnd),
-                start_time: taskState.TimeStart,
-                end_time: taskState.TimeEnd,
-                description: "",
-                userID: localStorage.getItem("userEmail"),
-            };
-            handleAddEvent(newEvent);
-
             console.log("taskState:", taskState);
             dispatch(createTasks(taskState))
                 .then(() => dispatch(getTasks()))

@@ -151,7 +151,6 @@ const CalendarHomePage = () => {
 
   const handleDeletingEvent = (id) => {
     dispatch(deleteEvent(id)).then(() => dispatch(getEvents()));
-    dispatch(deleteTasks(id)).then(() => dispatch(getTasks()));
   };
 
   const onEventResize = (data) => {
@@ -214,12 +213,14 @@ const CalendarHomePage = () => {
       var time2 = selectedEvent.end_time;
       const updateEvent = {
         title: title,
-        start: new Date(startDate),
-        end: new Date(endDate),
-        start_time: (`${startTime}${amPm}`) || time1,
-        end_time: (`${endTime}${amPm}`) || time2,
-        description: "",
+        description: Description,
+        task_status: TaskStatus,
+        DateStart: startDate,
+        DateEnd: endDate,
+        TimeStart: startTime,
+        TimeEnd: endTime,
         userID: localStorage.getItem("userEmail"),
+        isValidate: false,
       };
       handleUpdateEvent(id, updateEvent);
     }
@@ -229,27 +230,16 @@ const CalendarHomePage = () => {
       if (title !== "" && startDate !== "" && endDate !== "" && startTime !== "" && endTime !== "") {
         const newEvent = {
           title: title,
-          start: new Date(startDate),
-          end: new Date(endDate),
-          start_time: (`${startTime}${amPm}`),
-          end_time: (`${endTime}${amPm}`),
-          description: "",
-          userID: localStorage.getItem("userEmail"),
-        };
-        handleAddEvent(newEvent);
-
-        const taskState = {
-          title: title,
           description: Description,
-          // task_status: TaskStatus,
-          task_status: "todo",
+          task_status: TaskStatus,
           DateStart: startDate,
-          TimeStart: startTime,
           DateEnd: endDate,
+          TimeStart: startTime,
           TimeEnd: endTime,
           userID: localStorage.getItem("userEmail"),
+          isValidate: false,
         };
-        handleCreatetask(taskState);
+        handleAddEvent(newEvent);
       }
       else {
         toast({

@@ -43,7 +43,7 @@ const AdminSideSingleEventBoxLokesh = ({
       display="flex"
       flexDirection="column"
     >
-      <Box color={"blue.800"} fontWeight="bold" fontSize={{base: "70%", sm:"90%",md: "100%",lg:"100%",xl:"110%"}}>
+      <Box color={"blue.800"} fontWeight="bold" fontSize={{ base: "70%", sm: "90%", md: "100%", lg: "100%", xl: "110%" }}>
         <Text>{title}</Text>
         {description ? <Text>{description}</Text> : <></>}
       </Box>
@@ -54,25 +54,22 @@ const AdminSideSingleEventBoxLokesh = ({
         fontWeight="bold"
         display="flex"
         flexDirection="column"
-        fontSize={{base: "70%", sm:"90%",md: "100%",lg:"100%",xl:"110%"}}
+        fontSize={{ base: "70%", sm: "90%", md: "100%", lg: "100%", xl: "110%" }}
       >
         <Text>
           Start-date-{" "}
-          {`${start.getFullYear()}-${
-            start.getMonth() + 1 < 10
+          {`${start.getFullYear()}-${start.getMonth() + 1 < 10
               ? `0${start.getMonth() + 1}`
               : start.getMonth() + 1
-          }-${
-            start.getDate() + 1 < 10 ? `0${start.getDate()}` : start.getDate()
-          }`}
+            }-${start.getDate() + 1 < 10 ? `0${start.getDate()}` : start.getDate()
+            }`}
         </Text>
         <Text>
           End-date-{" "}
-          {`${" "} ${end.getFullYear()}-${
-            end.getMonth() + 1 < 10
+          {`${" "} ${end.getFullYear()}-${end.getMonth() + 1 < 10
               ? `0${end.getMonth() + 1}`
               : end.getMonth() + 1
-          }-${end.getDate() + 1 < 10 ? `0${end.getDate()}` : end.getDate()}`}
+            }-${end.getDate() + 1 < 10 ? `0${end.getDate()}` : end.getDate()}`}
         </Text>
       </Box>
       <Box
@@ -81,7 +78,7 @@ const AdminSideSingleEventBoxLokesh = ({
         fontWeight="bold"
         display="flex"
         flexDirection="column"
-        fontSize={{base: "70%", sm:"90%",md: "100%",lg:"100%",xl:"110%"}}
+        fontSize={{ base: "70%", sm: "90%", md: "100%", lg: "100%", xl: "110%" }}
       >
         <Text>Start-time- {start_time}</Text>
         <Text>End-time- {end_time}</Text>
