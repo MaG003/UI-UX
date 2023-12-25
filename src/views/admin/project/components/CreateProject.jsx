@@ -31,9 +31,7 @@ const initialTaskState = {
     listtask: [],
     member: [],
     date: "",
-    // priority: "High",
     progress: 0,
-    // status: "Private",
 };
 
 const taskReducer = (state, action) => {
@@ -61,23 +59,12 @@ const taskReducer = (state, action) => {
                 ...state,
                 date: action.payload,
             };
-        // case 'priority':
-        //     return {
-        //         ...state,
-        //         priority: action.payload,
-        //     };
 
         case 'progress':
             return {
                 ...state,
                 progress: action.payload,
             };
-
-        // case 'status':
-        //     return {
-        //         ...state,
-        //         status: action.payload,
-        //     };
 
         default:
             return state;
@@ -103,8 +90,6 @@ const CreateProject = ({ isOpen, onClose }) => {
             taskState.listtask.length !== 0 &&
             taskState.member.length !== 0 &&
             taskState.date !== "" &&
-            // taskState.priority !== "" &&
-            // taskState.status !== "",
             taskState.progress !== 0) {
 
             console.log(taskState);
