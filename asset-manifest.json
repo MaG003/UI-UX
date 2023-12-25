@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/UI-UX/static/css/main.c727ceea.css",
-    "main.js": "/UI-UX/static/js/main.89d6895e.js",
+    "main.js": "/UI-UX/static/js/main.c289da45.js",
     "static/media/auth.png": "/UI-UX/static/media/auth.32bcea8496862bd05394.png",
     "static/media/Navbar.png": "/UI-UX/static/media/Navbar.b1c65d8b8c17f7f948c6.png",
     "index.html": "/UI-UX/index.html",
     "main.c727ceea.css.map": "/UI-UX/static/css/main.c727ceea.css.map",
-    "main.89d6895e.js.map": "/UI-UX/static/js/main.89d6895e.js.map"
+    "main.c289da45.js.map": "/UI-UX/static/js/main.c289da45.js.map"
   },
   "entrypoints": [
     "static/css/main.c727ceea.css",
-    "static/js/main.89d6895e.js"
+    "static/js/main.c289da45.js"
   ]
 }
