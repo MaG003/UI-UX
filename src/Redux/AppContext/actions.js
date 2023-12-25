@@ -9,11 +9,14 @@ const getWorkSpace = () => (dispatch) => {
     .get(`https://6586fd43468ef171392f1856.mockapi.io/workspace`)
     .then((res) => {
       dispatch({ type: types.GET_WORKSPACE_SUCCESS, payload: res.data });
+      
     })
     .catch((e) => {
       dispatch({ type: types.GET_WORKSPACE_FAILURE, payload: e });
+       
     });
 };
+
 
 const createWorkSpace = (payload) => (dispatch) => {
   dispatch({ type: types.CREATE_WORKSPACE_REQUEST });
